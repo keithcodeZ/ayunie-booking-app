@@ -6,6 +6,14 @@ import userRoutes from "./routes/users";
 import authRoutes from "./routes/auth";
 import cookieParser from "cookie-parser";
 import path from "path";
+import { v2 as cloudinary } from "cloudinary";
+import propertiesRoutes from "./routes/properties";
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING as string);
 // test to see which database are we connected to
@@ -45,6 +53,9 @@ app.use("/api/auth", authRoutes)
 
 //any requests from the api will be passed to the userRoutes
 app.use("/api/users", userRoutes)
+
+// properties endpoint
+app.use("/api/properties", propertiesRoutes)
 
 //starts the server
 app.listen(7000, () => {
