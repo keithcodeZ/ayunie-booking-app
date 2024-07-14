@@ -20,10 +20,10 @@ const Header = () => {
                             >
                                 My Bookings
                             </Link>
-                            <Link to="/my-hotels"
+                            <Link to="/my-properties"
                                 className="flex items-center px-3 font-bold text-white hover:bg-blue-600"
                             >
-                                My Hotels
+                                My Properties
                             </Link>
                             <SignOutButton />
                             {/* <button>Sign Out</button> */}

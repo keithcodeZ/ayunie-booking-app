@@ -34,7 +34,7 @@ router.post(
         body("city").notEmpty().withMessage("City is required"),
         body("country").notEmpty().withMessage("Country is required"),
         body("description").notEmpty().withMessage("Description is required"),
-        body("type").notEmpty().withMessage("hotel Type is required"),
+        body("type").notEmpty().withMessage("Property Type is required"),
         // body("adultCount").notEmpty().withMessage("Adult count is required"),
         // body("childCount").notEmpty().withMessage("Child count is required"),
         body("facilities")
@@ -89,7 +89,7 @@ router.post(
             response.status(201).send(property);
 
         } catch (error) {
-            console.log("Error creating a hotel: " + error);
+            console.log("Error creating a property: " + error);
             response.status(500).json({ message: `Something went wrong: ${error}` });
         }
     }
