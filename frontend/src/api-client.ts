@@ -2,6 +2,7 @@
 
 import { RegisterFormData } from "./pages/Register"
 import { SignInFormData } from "./pages/SignIn";
+import { PropertyType } from "../../backend/src/models/property"
 
 //ENVIRONMENT VARIABLES USING VITE
 //the || '' tells that there is no API BASE URL so just use the same server for all the requests
@@ -58,7 +59,7 @@ export const validateToken = async () => {
     if (!response.ok) {
         // throw new Error(responseBody.message);
         throw new Error("TOKEN INVALID/Failed to validate token");
-    } 
+    }
 
     return response.json();
 }
@@ -90,3 +91,43 @@ export const addProperty = async (propertyFormData: FormData) => {
 
     return response.json();
 };
+
+
+export const fetchMyProperties = async (): Promise<PropertyType[]> => {
+    const response = await fetch(`${API_BASE_URL}/api/properties`, {
+        credentials: "include",
+    });
+
+    if (!response.ok) {
+        throw new Error("Error fetching properties");
+    }
+
+    return response.json();
+};
+
+export const fetchMyPropertyById = async(propertyId: string): Promise<PropertyType> =>{
+    const response = await fetch(`${API_BASE_URL}/api/properties/${propertyId}`, 
+    {credentials: "include"})
+
+    if(!response.ok){
+        throw new Error("Error fetching properties")
+    }
+
+    return response.json();
+}
+
+export const updateMyPropertyById = async (propertyFormData: FormData)=> {
+    const response = await fetch(`${API_BASE_URL}/api/properties/${propertyFormData.get("propertyId")}`,
+    {
+        method: "PUT",
+        body: propertyFormData,
+        credentials: "include",
+    });
+
+    if(!response.ok){
+        throw new Error("Failed to update Property")
+    }
+
+    return response.json();
+}
+
