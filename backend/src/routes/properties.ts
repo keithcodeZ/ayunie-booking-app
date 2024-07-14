@@ -27,7 +27,7 @@ const upload = multer({
 router.post(
     "/",
     // we need to verify that the user is logged in
-    verifyToken, 
+    verifyToken,
     // express validator
     [
         body("name").notEmpty().withMessage("Name is required"),
@@ -35,12 +35,13 @@ router.post(
         body("country").notEmpty().withMessage("Country is required"),
         body("description").notEmpty().withMessage("Description is required"),
         body("type").notEmpty().withMessage("Property Type is required"),
+
         // body("adultCount").notEmpty().withMessage("Adult count is required"),
         // body("childCount").notEmpty().withMessage("Child count is required"),
         body("facilities")
-        .notEmpty()
-        .isArray()
-        .withMessage("Facilities are required"),
+            .notEmpty()
+            .isArray()
+            .withMessage("Facilities are required"),
         body("pricePerNight")
             .notEmpty()
             .isNumeric()
@@ -58,21 +59,7 @@ router.post(
 
 
             // 1. upload the images to cloudinary
-            const uploadPromises = imageFiles.map( async (image) => {
-                // encode the image as a base64 string
-                const b64 = Buffer.from(image.buffer).toString("base64");
-
-                // a string that describes the image
-                let dataURI = "data:" + image.mimetype + ";base64," + b64;
-                 
-                // cloudinary SDK to upload the image
-                const response = await cloudinary.v2.uploader.upload(dataURI);
-
-                return response.url;
-            })
-
-            // waits all images to be uploaded first before continuing
-            const imageUrls = await Promise.all(uploadPromises);
+            const imageUrls = await uploadImages(imageFiles);
 
             // 2. if the upload is successful, add the URLs to the newProperty object
             newProperty.imageUrls = imageUrls;
@@ -95,5 +82,84 @@ router.post(
     }
 );
 
+router.get(
+    "/",
+    verifyToken, async (req: Request, res: Response) => {
 
-export default router
+        try {
+            const properties = await Property.find({ userId: req.userId });
+            res.json(properties);
+        } catch (error) {
+            res.status(500).json({ message: "Error fetching properties" })
+        }
+    }
+)
+
+router.get(
+    "/:id",
+    verifyToken, async (req: Request, res: Response) => {
+        const id = req.params.id.toString();
+        try{
+            const property = await Property.findOne({
+                _id: id,
+                userId: req.userId
+            })
+            res.json(property);
+        } catch(error){
+            res.status(500).json({message: "Error fetching properties"});
+        }
+    }
+    );
+
+router.put("/:propertyId", verifyToken,
+    upload.array("imageFiles"),
+    async (req: Request, res: Response) => {
+        try {
+            const updatedProperty: PropertyType = req.body;
+            updatedProperty.lastUpdated = new Date();
+
+            const property = await Property.findOneAndUpdate({
+                _id: req.params.propertyId,
+                userId: req.userId,
+            },
+            updatedProperty,
+            {new: true});
+            
+            if(!property){
+                return res.status(404).json({message: "Property not found"})
+            }
+
+            const files = req.files as Express.Multer.File[];
+            const updatedImagesUrls = await uploadImages(files);
+            
+            property.imageUrls = [...updatedImagesUrls, ...(updatedProperty.imageUrls || [])];
+            await property.save();
+            res.status(201).json(property);
+
+        } catch(error) {
+            res.status(500).json({message: "Something went throw"});
+        }
+    }
+)
+
+async function uploadImages(imageFiles: Express.Multer.File[]) {
+    const uploadPromises = imageFiles.map(async (image) => {
+        // encode the image as a base64 string
+        const b64 = Buffer.from(image.buffer).toString("base64");
+
+        // a string that describes the image
+        let dataURI = "data:" + image.mimetype + ";base64," + b64;
+
+        // cloudinary SDK to upload the image
+        const response = await cloudinary.v2.uploader.upload(dataURI);
+
+        return response.url;
+    });
+
+    // waits all images to be uploaded first before continuing
+    const imageUrls = await Promise.all(uploadPromises);
+    return imageUrls;
+}
+
+export default router;
+

@@ -14,6 +14,8 @@ import SignIn from "./pages/SignIn";
 import AddProperty from "./pages/AddProperty";
 import { useAppContext } from "./contexts/AppContext";
 import Search from "./pages/Search";
+import MyProperties from "./pages/MyProperties";
+import EditProperty from "./pages/EditProperty";
 
 function App() {
 
@@ -27,15 +29,35 @@ function App() {
         <Route path="/register" element={<Layout><Register/></Layout>}/>
         <Route path="/sign-in" element={<Layout><SignIn/></Layout>}/>
 
-        {isLoggedIn &&
+        {isLoggedIn && (
           <>
-            <Route path="/add-property" element={
-              <Layout>
-                <AddProperty />
-              </Layout>
-            }/>
+            <Route
+              path="/add-property"
+              element={
+                <Layout>
+                  <AddProperty />
+                </Layout>
+              }
+            />
+            <Route
+              path="/my-properties"
+              element={
+                <Layout>
+                  <MyProperties />
+                </Layout>
+              }
+            />
+            <Route
+              path="/edit-property/:propertyId"
+              element={
+                <Layout>
+                  <EditProperty />
+                </Layout>
+              }
+            />
           </>
-        }
+        )}
+
 
         {/* Catches all routes */}
         <Route path="*" element={<Navigate to="/" />} />
