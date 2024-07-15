@@ -28,13 +28,12 @@ const SearchBar = () => {
   };
 
   const handleClear = () => {
+    search.clearSearchValues();
     setDestination('');
-    setAdultCount(1);
-    setChildCount(0);
     setCheckIn(new Date());
     setCheckOut(new Date());
-
-    window.location.reload();
+    setAdultCount(1);
+    setChildCount(0);
   };
 
   const minDate = new Date();
