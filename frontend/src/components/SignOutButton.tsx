@@ -31,7 +31,7 @@ const SignOutButton = () => {
 
     return (
         <button
-            className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="w-48 inline-block bg-brown hover:bg-light-brown hover:text-custom-gray text-white font-bold py-2 px-10 rounded"
             onClick={handleClick}
         >
             Sign Out
