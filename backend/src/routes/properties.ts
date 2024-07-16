@@ -34,7 +34,8 @@ router.post(
         body("city").notEmpty().withMessage("City is required"),
         body("country").notEmpty().withMessage("Country is required"),
         body("description").notEmpty().withMessage("Description is required"),
-        body("type").notEmpty().withMessage("propert Type is required"),
+        body("type").notEmpty().withMessage("Property Type is required"),
+
         // body("adultCount").notEmpty().withMessage("Adult count is required"),
         // body("childCount").notEmpty().withMessage("Child count is required"),
         body("facilities")
