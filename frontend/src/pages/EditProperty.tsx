@@ -10,11 +10,12 @@ const EditProperty = () => {
 
   const { data: property } = useQuery(
     "fetchMyPropertyById",
-    () => apiClient.fetchMyPropertyById(propertyId || ""),
+    () => apiClient.fetchMyPropertyById(propertyId || ''),
     {
       enabled: !!propertyId,
     }
   );
+
 
   const { mutate, isLoading } = useMutation(apiClient.updateMyPropertyById, {
     onSuccess: () => {

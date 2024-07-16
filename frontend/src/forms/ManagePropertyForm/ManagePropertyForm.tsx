@@ -43,7 +43,8 @@ const ManagePropertyForm = ({ onSave, isLoading, property }: Props) => {
 
         //create new form data object & call our api
         const formData = new FormData();
-        if(property) {
+
+        if (property) {
             formData.append("propertyId", property._id);
         }
         formData.append("name", formDataJSON.name);
@@ -62,8 +63,8 @@ const ManagePropertyForm = ({ onSave, isLoading, property }: Props) => {
             formData.append(`facilities[${index}]`, facility);
         });
 
-        if(formDataJSON.imageUrls) {
-            formDataJSON.imageUrls.forEach((url, index) =>{
+        if (formDataJSON.imageUrls) {
+            formDataJSON.imageUrls.forEach((url, index) => {
                 formData.append(`imageUrls[${index}]`, url);
             })
         }
@@ -83,11 +84,11 @@ const ManagePropertyForm = ({ onSave, isLoading, property }: Props) => {
                 onSubmit={onSubmit}
                 className="flex flex-col gap-10"
             >
-                <DetailsSection/>
-                <TypeSection/>
-                <FacilitiesSection/>
-                <GuestsSection/>
-                <ImagesSection/>
+                <DetailsSection />
+                <TypeSection />
+                <FacilitiesSection />
+                <GuestsSection />
+                <ImagesSection />
 
                 <span className="flex justify-end">
                     <button disabled={isLoading} type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl disabled:bg-gray-500">
