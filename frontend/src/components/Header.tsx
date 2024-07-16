@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom";
 import { useAppContext } from "../contexts/AppContext";
+import SignOutButton from "./SignOutButton";
 
 const Header = () => {
 
@@ -7,9 +8,9 @@ const Header = () => {
 
     return (
         <div className="bg-white py-3">
-            <div className="flex justify-between px-20">
+            <div className="container mx-auto flex justify-between">
                 <span className="text-2xl text-custom-gray tracking-tight">
-                <img src="../src/assets/ayunie-logo.png" alt="ayunie-logo.png" className="h-10" />
+                    <Link to="/">Ayunie Logo</Link>
                 </span>
                 <span className="flex space-x-2">
                     {isLoggedIn ? 
