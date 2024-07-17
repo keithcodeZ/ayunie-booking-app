@@ -13,7 +13,7 @@ const Header = () => {
                 <span className="flex space-x-2">
                     {isLoggedIn ? 
                         (<>
-                            <Link to="/my-properties"
+                            <Link to="/add-properties"
                                 className="w-48 inline-block bg-white-500 hover:bg-light-brown text-custom-gray font-bold py-2 px-2 rounded text-center">
                                 List your Properties
                             </Link>
