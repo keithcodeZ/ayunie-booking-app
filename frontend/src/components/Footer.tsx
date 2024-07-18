@@ -1,6 +1,9 @@
 import {Link} from "react-router-dom";
+import { useAppContext } from "../contexts/AppContext";
 
 const Footer = () => {
+
+    const {isLoggedIn} = useAppContext();
 
     return (
         <div className="bg-custom-gray">
@@ -8,10 +11,20 @@ const Footer = () => {
 
             <div className=" pl-20 py-10">
                 <h1 className="text-white text-2xl py-6">Share your best places to the world.</h1>
-                <Link to="/my-properties"
-                    className="inline-block bg-brown hover:bg-light-brown hover:text-custom-gray text-white font-bold py-3 px-4 rounded">
-                    List your Properties
-                </Link>
+                {isLoggedIn ?
+
+                        (<Link to="/add-properties"
+                            className="inline-block bg-brown hover:bg-light-brown hover:text-custom-gray text-white font-bold py-3 px-4 rounded">
+                            List your Properties
+                        </Link>) : 
+
+                        (<Link to="/sign-in"
+                            className="inline-block bg-brown hover:bg-light-brown hover:text-custom-gray text-white font-bold py-3 px-4 rounded">
+                            List your Properties
+                        </Link>
+                        )
+
+                }
 
             </div>
 
