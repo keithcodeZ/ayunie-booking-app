@@ -170,3 +170,12 @@ export const updateMyPropertyById = async (propertyFormData: FormData)=> {
 
     return response.json();
 }
+
+export const fetchPropertyById = async (propertyId: string): Promise<PropertyType> => {
+  const response = await fetch(`${API_BASE_URL}/api/properties/${propertyId}`);
+  if (!response.ok) {
+    throw new Error("Error fetching Property");
+  }
+
+  return response.json();
+};

@@ -30,7 +30,7 @@ const Header = () => {
 
                                 </svg>
                             </Link>
-                            {/* <button>Sign Out</button> */}
+                            <SignOutButton/>
                         </>) : (
                             <Link to="/sign-in" className="flex items-center px-3 font-bold text-blue-700 bg-white hover:text-white hover:bg-blue-700">Sign In</Link>
                         )
