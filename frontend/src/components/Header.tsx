@@ -7,7 +7,7 @@ const Header = () => {
     const {isLoggedIn} = useAppContext();
 
     return (
-        <div className="bg-white py-3">
+        <div className="border bg-white py-3">
             <div className=" flex justify-between px-20">
                 <img src="../src/assets/ayunie-logo.png" alt="ayunie-logo.png" className="h-10 pr-10" />
                 <span className="flex space-x-2">

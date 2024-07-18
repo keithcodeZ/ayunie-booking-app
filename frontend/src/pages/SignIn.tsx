@@ -36,10 +36,11 @@ const SignIn = () => {
     });
 
     return (
-        <div className="flex justify-center py-10">
+        <div className="flex flex-col justify-center py-10 items-center">
             <form className="w-2/5 flex flex-col gap-5" onSubmit={onSubmit}>
                 <h2 className="text-xl font-bold text-center">Sign In</h2>
 
+                <div>
                 <label className="text-gray-700 text-xs font-bold flex-1">
                     Email
                     <input className="bg-gray-100 rounded w-full py-3 px-2 font-normal" type="email" placeholder="Enter your Email" {...register('email', { required: "This field is required" })} />
@@ -66,6 +67,7 @@ const SignIn = () => {
                     )
                     }
                 </label>
+                </div>
 
                 <div className="flex items-center justify-between">
                     <span>
@@ -96,7 +98,7 @@ const SignIn = () => {
                     <button className="w-full bg-white border hover:bg-gray-100 text-gray-700 text-s py-2 rounded" type="submit">
                         Continue with Google
                     </button>
-                    <button className="w-full bg-blue-900 hover:bg-blue-700 hover:border text-white text-s py-2 rounded" type="submit">
+                    <button className="w-full bg-blue-900 hover:bg-blue-700 text-white text-s py-2 rounded" type="submit">
                         Continue with Facebook
                     </button>
                 </div>
