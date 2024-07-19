@@ -24,7 +24,9 @@ const ImagesSection = () => {
 
       return (
         <div>
-          <h2 className="text-2xl font-bold mb-3">Images</h2>
+            <span className="flex justify-between py-8 px-8">
+                <h1 className="text-xl font-bold text-custom-gray"> Property Images </h1>
+            </span>
           <div className="border rounded p-4 flex flex-col gap-4">
             {existingImagesUrls && (
               <div className="grid grid-cols-6 gap-4">

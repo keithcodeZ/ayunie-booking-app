@@ -9,14 +9,17 @@ const FacilitiesSection = () => {
     } = useFormContext<PropertyFormData>();
 
     return (
-        <div>
-            <h2 className="text-2xl font-bold mb-3">Facilities of the Property</h2>
+        <div className="">
+            <span className="flex justify-between py-8 px-8">
+                <h1 className="text-xl font-bold text-custom-gray"> Facilities and Ameneties </h1>
+            </span>
+            
 
             <div className="grid grid-cols-5 gap-3">
 
                 {propertyFacilities.map((facility) => (
                     <label
-                        className="flex gap-1 text-sm text-gray-00 items-center cursor-pointer"
+                        className="flex gap-4 text-xs text-custom-gray items-center cursor-pointer"
                     >
                         <input
                             type="checkbox"

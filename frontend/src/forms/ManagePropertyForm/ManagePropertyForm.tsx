@@ -82,7 +82,7 @@ const ManagePropertyForm = ({ onSave, isLoading, property }: Props) => {
         <FormProvider {...formMethods}>
             <form
                 onSubmit={onSubmit}
-                className="flex flex-col gap-10"
+                className="flex flex-col gap-8"
             >
                 <DetailsSection />
                 <TypeSection />
@@ -91,7 +91,7 @@ const ManagePropertyForm = ({ onSave, isLoading, property }: Props) => {
                 <ImagesSection />
 
                 <span className="flex justify-end">
-                    <button disabled={isLoading} type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl disabled:bg-gray-500">
+                    <button disabled={isLoading} type="submit" className="w-48 inline-block bg-brown hover:text-custom-gray hover:bg-light-brown text-white font-bold py-2 px-2 rounded text-center">
                         {isLoading ? "Saving..." : "Save Property"}
                     </button>
                 </span>
