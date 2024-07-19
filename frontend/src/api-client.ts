@@ -2,12 +2,22 @@
 
 import { RegisterFormData } from "./pages/Register"
 import { SignInFormData } from "./pages/SignIn";
-import { PropertySearchResponse } from "../../backend/src/shared/types";
-import { PropertyType } from "../../backend/src/models/property"
+import { PropertySearchResponse, PropertyType, UserType } from "../../backend/src/shared/types";
+import { BookingFormData } from "./forms/BookingForm/BookingForm";
 
 //ENVIRONMENT VARIABLES USING VITE
 //the || '' tells that there is no API BASE URL so just use the same server for all the requests
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
+export const fetchCurrentUser = async (): Promise<UserType> => {
+  const response = await fetch(`${API_BASE_URL}/api/users/me`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error fetching user");
+  }
+  return response.json();
+};
 
 export const register = async (formData: RegisterFormData) => {
 
@@ -78,8 +88,8 @@ export const signOut = async () => {
     }
 }
 
-export const addProperty = async (propertyFormData: FormData) => {
-    const response = await fetch(`${API_BASE_URL}/api/properties`, {
+export const addMyProperty = async (propertyFormData: FormData) => {
+    const response = await fetch(`${API_BASE_URL}/api/my-properties`, {
         method: "POST",
         credentials: "include",
         body: propertyFormData
@@ -92,6 +102,44 @@ export const addProperty = async (propertyFormData: FormData) => {
 
     return response.json();
 };
+
+export const fetchMyProperties = async (): Promise<PropertyType[]> => {
+    const response = await fetch(`${API_BASE_URL}/api/my-properties`, {
+        credentials: "include",
+    });
+
+    if (!response.ok) {
+        throw new Error("Error fetching properties");
+    }
+
+    return response.json();
+};
+
+export const fetchMyPropertyById = async(propertyId: string): Promise<PropertyType> =>{
+    const response = await fetch(`${API_BASE_URL}/api/my-properties/${propertyId}`, 
+    {credentials: "include"})
+
+    if(!response.ok){
+        throw new Error("Error fetching properties")
+    }
+
+    return response.json();
+}
+
+export const updateMyPropertyById = async (propertyFormData: FormData)=> {
+    const response = await fetch(`${API_BASE_URL}/api/my-properties/${propertyFormData.get("propertyId")}`,
+    {
+        method: "PUT",
+        body: propertyFormData,
+        credentials: "include",
+    });
+
+    if(!response.ok){
+        throw new Error("Failed to update Property")
+    }
+
+    return response.json();
+}
 
 export type SearchParams = {
   destination?: string;
@@ -123,7 +171,7 @@ export const searchProperties = async (searchParams: SearchParams): Promise<Prop
   searchParams.stars?.forEach((star) => queryParams.append("stars", star));
 
   const response = await fetch(
-    `${API_BASE_URL}/api/search-properties/search?${queryParams}`
+    `${API_BASE_URL}/api/properties/search?${queryParams}`
   );
 
   if (!response.ok) {
@@ -133,40 +181,49 @@ export const searchProperties = async (searchParams: SearchParams): Promise<Prop
   return response.json();
 };
 
-export const fetchMyProperties = async (): Promise<PropertyType[]> => {
-    const response = await fetch(`${API_BASE_URL}/api/properties`, {
-        credentials: "include",
-    });
-
-    if (!response.ok) {
-        throw new Error("Error fetching properties");
-    }
-
-    return response.json();
+export const fetchProperties = async (): Promise<PropertyType[]> => {
+  const response = await fetch(`${API_BASE_URL}/api/properties`);
+  if (!response.ok) {
+    throw new Error("Error fetching properties");
+  }
+  return response.json();
 };
 
-export const fetchMyPropertyById = async(propertyId: string): Promise<PropertyType> =>{
-    const response = await fetch(`${API_BASE_URL}/api/properties/${propertyId}`, 
-    {credentials: "include"})
+export const fetchPropertyById = async (propertyId: string): Promise<PropertyType> => {
+  const response = await fetch(`${API_BASE_URL}/api/properties/${propertyId}`);
+  if (!response.ok) {
+    throw new Error("Error fetching Property");
+  }
 
-    if(!response.ok){
-        throw new Error("Error fetching properties")
-    }
+  return response.json();
+};
 
-    return response.json();
-}
-
-export const updateMyPropertyById = async (propertyFormData: FormData)=> {
-    const response = await fetch(`${API_BASE_URL}/api/properties/${propertyFormData.get("propertyId")}`,
+export const createRoomBooking = async (formData: BookingFormData) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/properties/${formData.propertyId}/bookings`,
     {
-        method: "PUT",
-        body: propertyFormData,
-        credentials: "include",
-    });
-
-    if(!response.ok){
-        throw new Error("Failed to update Property")
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(formData),
     }
+  );
+
+  if (!response.ok) {
+    throw new Error("Error booking room");
+  }
+};
+
+export const fetchMyBookings = async (): Promise<PropertyType[]> => {
+  const response = await fetch(`${API_BASE_URL}/api/my-bookings`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to fetch bookings");
+  }
 
     return response.json();
 }

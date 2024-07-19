@@ -1,165 +1,163 @@
 import express, { Request, Response } from "express";
-import multer from "multer";
-import cloudinary from "cloudinary";
-import Property, { PropertyType } from "../models/property";
+import Property from "../models/property";
+import { BookingType, PropertySearchResponse } from "../shared/types";
+import { param, validationResult } from "express-validator";
 import verifyToken from "../middleware/auth";
-import { body } from "express-validator";
-
 
 const router = express.Router();
 
-// we want to tell multer that we want to store any file/images from the push request in memory
-// this will forward the file to cloudinary
-const storage = multer.memoryStorage();
+router.get("/search", async (req: Request, res: Response) => {
+  try {
+    const query = constructSearchQuery(req.query);
 
-// we want to define the file limits and initalize multer
-const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 1024 * 1024 * 5 // 5MB
+    let sortOptions = {};
+    switch (req.query.sortOption) {
+      case "starRating":
+        sortOptions = { starRating: -1 };
+        break;
+      case "pricePerNightAsc":
+        sortOptions = { pricePerNight: 1 };
+        break;
+      case "pricePerNightDesc":
+        sortOptions = { pricePerNight: -1 };
+        break;
     }
+
+    const pageSize = 5;
+    const pageNumber = parseInt(
+      req.query.page ? req.query.page.toString() : "1"
+    );
+    const skip = (pageNumber - 1) * pageSize;
+
+    const properties = await Property.find(query)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(pageSize);
+
+    const total = await Property.countDocuments(query);
+
+    const response: PropertySearchResponse = {
+      data: properties,
+      pagination: {
+        total,
+        page: pageNumber,
+        pages: Math.ceil(total / pageSize),
+      },
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
 });
 
-
-// api/properties
-// the endpoint where the frontend will make requests whenever the user submits the add property form
-// we have to handle a multipart form data request because the frontend sends a file along with the form
-router.post(
-    "/",
-    // we need to verify that the user is logged in
-    verifyToken,
-    // express validator
-    [
-        body("name").notEmpty().withMessage("Name is required"),
-        body("city").notEmpty().withMessage("City is required"),
-        body("country").notEmpty().withMessage("Country is required"),
-        body("description").notEmpty().withMessage("Description is required"),
-        body("type").notEmpty().withMessage("Property Type is required"),
-
-        // body("adultCount").notEmpty().withMessage("Adult count is required"),
-        // body("childCount").notEmpty().withMessage("Child count is required"),
-        body("facilities")
-            .notEmpty()
-            .isArray()
-            .withMessage("Facilities are required"),
-        body("pricePerNight")
-            .notEmpty()
-            .isNumeric()
-            .withMessage("Price per night is required and must be a number"),
-        // body("starRating").notEmpty().withMessage("Star rating is required"),
-
-    ],
-    upload.array("imageFiles", 6),
-    async (request: Request, response: Response) => {
-        // response.status(200).send();
-        try {
-            // response.status(200).send();
-            const imageFiles = request.files as Express.Multer.File[];
-            const newProperty: PropertyType = request.body;
-
-
-            // 1. upload the images to cloudinary
-            const imageUrls = await uploadImages(imageFiles);
-
-            // 2. if the upload is successful, add the URLs to the newProperty object
-            newProperty.imageUrls = imageUrls;
-            newProperty.lastUpdated = new Date();
-            // request .userId is set in the auth middleware it is taken from the token/cookie in the request
-            newProperty.userId = request.userId;
-
-            // 3. save the newProperty object to the database
-            //references the schema and creates a new document in the database
-            const property = new Property(newProperty);
-            await property.save();
-
-            // 4. send the newProperty object back to the frontend & return a 201 status
-            response.status(201).send(property);
-
-        } catch (error) {
-            console.log("Error creating a property: " + error);
-            response.status(500).json({ message: `Something went wrong: ${error}` });
-        }
+router.get(
+  "/:id",
+  [param("id").notEmpty().withMessage("Property ID is required")],
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
+
+    const id = req.params.id.toString();
+
+    try {
+      const property = await Property.findById(id);
+      res.json(property);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Error fetching property" });
+    }
+  }
 );
 
-router.get(
-    "/",
-    verifyToken, async (req: Request, res: Response) => {
+router.post(
+  "/:propertyId/bookings",
+  verifyToken,
+  async (req: Request, res: Response) => {
+    try {
+      const newBooking: BookingType = {
+        ...req.body,
+        userId: req.userId,
+      };
 
-        try {
-            const properties = await Property.find({ userId: req.userId });
-            res.json(properties);
-        } catch (error) {
-            res.status(500).json({ message: "Error fetching properties" })
+      const property = await Property.findOneAndUpdate(
+        { _id: req.params.propertyId },
+        {
+          $push: { bookings: newBooking },
         }
+      );
+
+      if (!property) {
+        return res.status(400).json({ message: "property not found" });
+      }
+
+      await property.save();
+      res.status(200).send();
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "something went wrong" });
     }
-)
+  }
+);
 
-router.get(
-    "/:id",
-    verifyToken, async (req: Request, res: Response) => {
-        const id = req.params.id.toString();
-        try{
-            const property = await Property.findOne({
-                _id: id,
-                userId: req.userId
-            })
-            res.json(property);
-        } catch(error){
-            res.status(500).json({message: "Error fetching properties"});
-        }
-    }
-    );
+const constructSearchQuery = (queryParams: any) => {
+  let constructedQuery: any = {};
 
-router.put("/:propertyId", verifyToken,
-    upload.array("imageFiles"),
-    async (req: Request, res: Response) => {
-        try {
-            const updatedProperty: PropertyType = req.body;
-            updatedProperty.lastUpdated = new Date();
+  if (queryParams.destination) {
+    // check name, city, and country for entered phrase
+    constructedQuery.$or = [
+      { name: new RegExp(queryParams.destination, "i") },
+      { city: new RegExp(queryParams.destination, "i") },
+      { country: new RegExp(queryParams.destination, "i") },
+    ];
+  }
 
-            const property = await Property.findOneAndUpdate({
-                _id: req.params.propertyId,
-                userId: req.userId,
-            },
-            updatedProperty,
-            {new: true});
-            
-            if(!property){
-                return res.status(404).json({message: "Property not found"})
-            }
+  if (queryParams.adultCount) {
+    constructedQuery.adultCount = {
+      $gte: parseInt(queryParams.adultCount),
+    };
+  }
 
-            const files = req.files as Express.Multer.File[];
-            const updatedImagesUrls = await uploadImages(files);
-            
-            property.imageUrls = [...updatedImagesUrls, ...(updatedProperty.imageUrls || [])];
-            await property.save();
-            res.status(201).json(property);
+  if (queryParams.childCount) {
+    constructedQuery.childCount = {
+      $gte: parseInt(queryParams.childCount),
+    };
+  }
 
-        } catch(error) {
-            res.status(500).json({message: "Something went throw"});
-        }
-    }
-)
+  if (queryParams.facilities) {
+    constructedQuery.facilities = {
+      $all: Array.isArray(queryParams.facilities)
+        ? queryParams.facilities
+        : [queryParams.facilities],
+    };
+  }
 
-async function uploadImages(imageFiles: Express.Multer.File[]) {
-    const uploadPromises = imageFiles.map(async (image) => {
-        // encode the image as a base64 string
-        const b64 = Buffer.from(image.buffer).toString("base64");
+  if (queryParams.types) {
+    constructedQuery.type = {
+      $in: Array.isArray(queryParams.types)
+        ? queryParams.types
+        : [queryParams.types],
+    };
+  }
 
-        // a string that describes the image
-        let dataURI = "data:" + image.mimetype + ";base64," + b64;
+  if (queryParams.stars) {
+    const starRatings = Array.isArray(queryParams.stars)
+      ? queryParams.stars.map((star: string) => parseInt(star))
+      : parseInt(queryParams.stars);
 
-        // cloudinary SDK to upload the image
-        const response = await cloudinary.v2.uploader.upload(dataURI);
+    constructedQuery.starRating = { $in: starRatings };
+  }
 
-        return response.url;
-    });
+  if (queryParams.maxPrice) {
+    constructedQuery.pricePerNight = {
+      $lte: parseInt(queryParams.maxPrice).toString(),
+    };
+  }
 
-    // waits all images to be uploaded first before continuing
-    const imageUrls = await Promise.all(uploadPromises);
-    return imageUrls;
-}
+  return constructedQuery;
+};
 
 export default router;
-
