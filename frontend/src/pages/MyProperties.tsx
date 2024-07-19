@@ -18,7 +18,7 @@ const MyProperties = () => {
     }
 
     return (
-        <div className="space-y-5">
+        <div className="">
 
             
             <span className="flex justify-between">
@@ -27,8 +27,10 @@ const MyProperties = () => {
                     to="/add-property"
                     className="flex bg-blue-600 text-white text-xl font-bold p-2 hover:bg-blue-500">
                     Add Property
-                </Link>
+                </Link>                
             </span>
+
+            
 
 
             <div className="grid grid-cols-1 gap-8">
