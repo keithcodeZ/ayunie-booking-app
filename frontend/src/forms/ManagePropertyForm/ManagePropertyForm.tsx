@@ -4,8 +4,9 @@ import TypeSection from "./TypeSection";
 import FacilitiesSection from "./FacilitiesSection";
 import GuestsSection from "./GuestsSection";
 import ImagesSection from "./ImagesSection";
-import { PropertyType } from "../../../../backend/src/models/property";
+
 import { useEffect } from "react";
+import { PropertyType } from "../../../../backend/src/shared/types";
 
 export type PropertyFormData = {
     name: string;
