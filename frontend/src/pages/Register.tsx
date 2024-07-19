@@ -58,7 +58,7 @@ const Register = () => {
                 <h2 className="text-xl font-bold text-center">Register</h2>
 
                 <div className="flex flex-col-2 gap-4">
-                <label className="text-gray-700 text-xs font-bold flex-1">
+                    <label className="text-gray-700 text-xs font-bold flex-1">
                         First Name
                         <input className="bg-gray-100 rounded w-full py-3 px-2 font-normal" type="text" placeholder="Enter your first name" {...register('firstName', { required: "This field is required" })} />
                         {/* shorthand to say if the left is TRUE then to the RIGHT */}
@@ -77,7 +77,7 @@ const Register = () => {
                         }
                     </label>
                 </div>
-                
+
                 <div>
 
                     <label className="text-gray-700 text-xs font-bold flex-1">
