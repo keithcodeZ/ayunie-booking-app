@@ -3,6 +3,9 @@ import DatePicker from "react-datepicker";
 import { useSearchContext } from "../../contexts/SearchContext";
 import { useAppContext } from "../../contexts/AppContext";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import * as apiClient from "../../api-client";
+import "react-datepicker/dist/react-datepicker.css";
 
 type Props = {
   propertyId: string;
@@ -21,6 +24,9 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
   const { isLoggedIn } = useAppContext();
   const navigate = useNavigate();
   const location = useLocation();
+  const [bookings, setBookings] = useState<GuestInfoFormData[]>([]);
+  const [dateError, setDateError] = useState<string | null>(null);
+  const [dateConflictError, setDateConflictError] = useState<string | null>(null);
 
   const {
     watch,
@@ -39,6 +45,76 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
 
   const checkIn = watch("checkIn");
   const checkOut = watch("checkOut");
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const response = await apiClient.fetchPropertyById(propertyId)
+        setBookings(response.bookings);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      }
+    };
+
+    fetchBookings();
+  }, [propertyId]);
+
+  useEffect(() => {
+    const checkDateConflict = () => {
+      // Ensure check-out date is not earlier than check-in date
+      if (checkIn && checkOut) {
+        if (checkOut < checkIn) {
+          setDateError("Invalid Date");
+          setDateConflictError(null);
+          return;
+        } else {
+          setDateError(null);
+        }
+      }
+
+      // Check for date conflicts with existing bookings
+      const conflict = bookings.some(
+        (booking) =>
+          // Check if Check-in Date is in between existing bookings
+          (checkIn > new Date(booking.checkIn) && checkIn < new Date(booking.checkOut)) ||
+
+          // Check if Check-out Date is in between existing bookings
+          (checkOut > new Date(booking.checkIn) && checkOut < new Date(booking.checkOut)) ||
+
+          // Check if New Booking entirely overlaps Existing Bookings
+          (checkIn <= new Date(booking.checkIn) && checkOut >= new Date(booking.checkOut)) ||
+
+          // Check-in and Check-out dates are not exactly the same as the existing bookings' Check-in and Check-out dates, 
+          // but allowing the overlap on one side.
+          (checkIn === new Date(booking.checkIn) && checkOut !== new Date(booking.checkOut)) ||
+          (checkIn !== new Date(booking.checkIn) && checkOut === new Date(booking.checkOut))
+      );
+      if (conflict) {
+        setDateConflictError("Date Unavailable");
+      } else {
+        setDateConflictError(null);
+      }
+    };
+
+    // Only check date conflicts if both dates are provided
+    if (checkIn && checkOut) {
+      checkDateConflict();
+    } else {
+      setDateError(null);
+      setDateConflictError(null);
+    }
+  }, [checkIn, checkOut, bookings]);
+
+  // Generate an array of dates to be excluded
+  const excludeDates = bookings.flatMap(booking => {
+    const start = new Date(booking.checkIn);
+    const end = new Date(booking.checkOut);
+    const dates = [];
+    for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
+      dates.push(new Date(date));
+    }
+    return dates;
+  });
 
   const minDate = new Date();
   const maxDate = new Date();
@@ -68,7 +144,7 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
 
   return (
     <div className="flex flex-col p-4 bg-blue-200 gap-4">
-      <h3 className="text-md font-bold">£{pricePerNight}</h3>
+      <h3 className="text-md font-bold">${pricePerNight}</h3>
       <form
         onSubmit={
           isLoggedIn ? handleSubmit(onSubmit) : handleSubmit(onSignInClick)
@@ -85,6 +161,7 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
               endDate={checkOut}
               minDate={minDate}
               maxDate={maxDate}
+              excludeDates={excludeDates}
               placeholderText="Check-in Date"
               className="min-w-full bg-white p-2 focus:outline-none"
               wrapperClassName="min-w-full"
@@ -95,12 +172,13 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
               required
               selected={checkOut}
               onChange={(date) => setValue("checkOut", date as Date)}
-              selectsStart
+              selectsEnd
               startDate={checkIn}
               endDate={checkOut}
               minDate={minDate}
               maxDate={maxDate}
-              placeholderText="Check-in Date"
+              excludeDates={excludeDates}
+              placeholderText="Check-out Date"
               className="min-w-full bg-white p-2 focus:outline-none"
               wrapperClassName="min-w-full"
             />
@@ -141,15 +219,18 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
               </span>
             )}
           </div>
-          {isLoggedIn ? (
-            <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
-              Book Now
-            </button>
-          ) : (
-            <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
-              Sign in to Book
-            </button>
+          {dateError && (
+            <span className="text-red-500 font-semibold text-sm">{dateError}</span>
           )}
+          {dateConflictError && (
+            <span className="text-red-500 font-semibold text-sm">{dateConflictError}</span>
+          )}
+          <button
+            className={`bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl ${dateError || dateConflictError ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={!!dateError || !!dateConflictError}
+          >
+            {isLoggedIn ? 'Book Now' : 'Sign in to Book'}
+        </button>
         </div>
       </form>
     </div>
