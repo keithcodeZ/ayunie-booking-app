@@ -132,21 +132,6 @@ const Register = () => {
                     </button>
                 </div>
 
-                <div className="inline-flex items-center justify-center w-full">
-                    <hr className="w-full h-px my-4 bg-gray-200 border-0" />
-                    <span className="absolute text-xs text-gray-700 px-3 -translate-x-1/2 bg-white left-1/2">or use one of these options</span>
-                </div>
-
-                <div className="grid gap-3">
-
-                    <button className="w-full bg-white border hover:bg-gray-100 text-gray-700 text-s py-2 rounded" type="submit">
-                        Continue with Google
-                    </button>
-                    <button className="w-full bg-blue-900 hover:bg-blue-700 text-white text-s py-2 rounded" type="submit">
-                        Continue with Facebook
-                    </button>
-                </div>
-
                 <div className="flex justify-center items-center pt-10">
                     <span className="text-sm">
                         Already have an account? {" "}
