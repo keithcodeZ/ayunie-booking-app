@@ -9,6 +9,7 @@ import path from "path";
 import { v2 as cloudinary } from "cloudinary";
 import myPropertyRoutes from "./routes/my-properties";
 import propertyRoutes from "./routes/properties";
+import bookingRoutes from "./routes/my-bookings";
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -58,8 +59,11 @@ app.use("/api/users", userRoutes)
 // properties endpoint
 app.use("/api/my-properties", myPropertyRoutes)
 
-//search endpoint
+// search endpoint
 app.use("/api/properties", propertyRoutes)
+
+// booking endpoint
+app.use("/api/my-bookings", bookingRoutes)
 
 //starts the server
 app.listen(7000, () => {
