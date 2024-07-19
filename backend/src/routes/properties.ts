@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express";
 import Property from "../models/property";
-import { PropertySearchResponse } from "../shared/types";
+import { BookingType, PropertySearchResponse } from "../shared/types";
 import { param, validationResult } from "express-validator";
+import verifyToken from "../middleware/auth";
 
 const router = express.Router();
 
@@ -68,6 +69,36 @@ router.get(
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Error fetching property" });
+    }
+  }
+);
+
+router.post(
+  "/:propertyId/bookings",
+  verifyToken,
+  async (req: Request, res: Response) => {
+    try {
+      const newBooking: BookingType = {
+        ...req.body,
+        userId: req.userId,
+      };
+
+      const property = await Property.findOneAndUpdate(
+        { _id: req.params.propertyId },
+        {
+          $push: { bookings: newBooking },
+        }
+      );
+
+      if (!property) {
+        return res.status(400).json({ message: "property not found" });
+      }
+
+      await property.save();
+      res.status(200).send();
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "something went wrong" });
     }
   }
 );
