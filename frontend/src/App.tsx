@@ -18,6 +18,7 @@ import MyProperties from "./pages/MyProperties";
 import EditProperty from "./pages/EditProperty";
 import Detail from "./pages/Detail";
 import Booking from "./pages/Booking";
+import MyBookings from "./pages/MyBookings";
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
             <Route path="/property/:propertyId/booking" element={<Layout><Booking/></Layout>}/>
             <Route path="/add-property" element={<Layout><AddProperty/></Layout>}/>
             <Route path="/my-properties" element={<Layout><MyProperties/></Layout>}/>
+            <Route path="/my-bookings" element={<Layout><MyBookings/></Layout>}/>
             <Route path="/edit-property/:propertyId" element={<Layout><EditProperty /></Layout>}/>
           </>
         )}

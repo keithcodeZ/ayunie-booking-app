@@ -1,11 +1,12 @@
 import { useForm } from "react-hook-form";
 import { PropertyType, UserType } from "../../../../backend/src/shared/types";
 import { useSearchContext } from "../../contexts/SearchContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "react-query";
 import * as apiClient from "../../api-client";
 import { useAppContext } from "../../contexts/AppContext";
 import { paymentOptions } from "../../config/payment-options-config";
+import { useState } from "react";
 
 type Props = {
   currentUser: UserType;
@@ -31,17 +32,20 @@ const BookingForm = ({ currentUser, numberOfNights, property }: Props) => {
 
   const { showToast } = useAppContext();
 
-  const { mutate: bookRoom, isLoading } = useMutation(
-    apiClient.createRoomBooking,
-    {
-      onSuccess: () => {
-        showToast({ message: "Booking Saved!", type: "SUCCESS" });
-      },
-      onError: () => {
-        showToast({ message: "Error saving booking", type: "ERROR" });
-      },
-    }
-  );
+   const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { mutate: bookRoom } = useMutation(apiClient.createRoomBooking, {
+    onSuccess: () => {
+      showToast({ message: "Booking Saved!", type: "SUCCESS" });
+      navigate("/"); // Navigate to home page after successful booking
+    },
+    onError: () => {
+      showToast({ message: "Error saving booking", type: "ERROR" });
+      setIsLoading(false);
+    },
+  });
 
   const { handleSubmit, register } = useForm<BookingFormData>({
     defaultValues: {
@@ -58,11 +62,13 @@ const BookingForm = ({ currentUser, numberOfNights, property }: Props) => {
   });
 
   const onSubmit = async (formData: BookingFormData) => {
+    setIsLoading(true);
     try {
-        bookRoom(formData);
-    } catch (error){
+      bookRoom(formData);
+    } catch (error) {
       console.error("Error booking room:", error);
       showToast({ message: "Error saving booking", type: "ERROR" });
+      setIsLoading(false);
     }
   };
 
