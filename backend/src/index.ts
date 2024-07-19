@@ -7,8 +7,8 @@ import authRoutes from "./routes/auth";
 import cookieParser from "cookie-parser";
 import path from "path";
 import { v2 as cloudinary } from "cloudinary";
-import propertiesRoutes from "./routes/properties";
-import searchRoutes from "./routes/search";
+import myPropertyRoutes from "./routes/my-properties";
+import propertyRoutes from "./routes/properties";
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -56,10 +56,10 @@ app.use("/api/auth", authRoutes)
 app.use("/api/users", userRoutes)
 
 // properties endpoint
-app.use("/api/properties", propertiesRoutes)
+app.use("/api/my-properties", myPropertyRoutes)
 
 //search endpoint
-app.use("/api/search-properties", searchRoutes)
+app.use("/api/properties", propertyRoutes)
 
 //starts the server
 app.listen(7000, () => {
