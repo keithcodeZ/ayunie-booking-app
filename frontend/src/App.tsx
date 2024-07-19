@@ -17,6 +17,7 @@ import Search from "./pages/Search";
 import MyProperties from "./pages/MyProperties";
 import EditProperty from "./pages/EditProperty";
 import Detail from "./pages/Detail";
+import Booking from "./pages/Booking";
 
 function App() {
 
@@ -33,33 +34,12 @@ function App() {
 
         {isLoggedIn && (
           <>
-            <Route
-              path="/add-property"
-              element={
-                <Layout>
-                  <AddProperty />
-                </Layout>
-              }
-            />
-            <Route
-              path="/my-properties"
-              element={
-                <Layout>
-                  <MyProperties />
-                </Layout>
-              }
-            />
-            <Route
-              path="/edit-property/:propertyId"
-              element={
-                <Layout>
-                  <EditProperty />
-                </Layout>
-              }
-            />
+            <Route path="/property/:propertyId/booking" element={<Layout><Booking/></Layout>}/>
+            <Route path="/add-property" element={<Layout><AddProperty/></Layout>}/>
+            <Route path="/my-properties" element={<Layout><MyProperties/></Layout>}/>
+            <Route path="/edit-property/:propertyId" element={<Layout><EditProperty /></Layout>}/>
           </>
         )}
-
 
         {/* Catches all routes */}
         <Route path="*" element={<Navigate to="/" />} />

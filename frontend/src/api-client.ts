@@ -2,11 +2,22 @@
 
 import { RegisterFormData } from "./pages/Register"
 import { SignInFormData } from "./pages/SignIn";
-import { PropertySearchResponse, PropertyType } from "../../backend/src/shared/types";
+import { PropertySearchResponse, PropertyType, UserType } from "../../backend/src/shared/types";
+import { BookingFormData } from "./forms/BookingForm/BookingForm";
 
 //ENVIRONMENT VARIABLES USING VITE
 //the || '' tells that there is no API BASE URL so just use the same server for all the requests
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
+export const fetchCurrentUser = async (): Promise<UserType> => {
+  const response = await fetch(`${API_BASE_URL}/api/users/me`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error fetching user");
+  }
+  return response.json();
+};
 
 export const register = async (formData: RegisterFormData) => {
 
@@ -170,7 +181,7 @@ export const searchProperties = async (searchParams: SearchParams): Promise<Prop
   return response.json();
 };
 
-export const fetchPropertiess = async (): Promise<PropertyType[]> => {
+export const fetchProperties = async (): Promise<PropertyType[]> => {
   const response = await fetch(`${API_BASE_URL}/api/properties`);
   if (!response.ok) {
     throw new Error("Error fetching properties");
@@ -182,6 +193,36 @@ export const fetchPropertyById = async (propertyId: string): Promise<PropertyTyp
   const response = await fetch(`${API_BASE_URL}/api/properties/${propertyId}`);
   if (!response.ok) {
     throw new Error("Error fetching Property");
+  }
+
+  return response.json();
+};
+
+export const createRoomBooking = async (formData: BookingFormData) => {
+  const response = await fetch(
+    `${API_BASE_URL}/api/properties/${formData.propertyId}/bookings`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(formData),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Error booking room");
+  }
+};
+
+export const fetchMyBookings = async (): Promise<PropertyType[]> => {
+  const response = await fetch(`${API_BASE_URL}/api/my-bookings`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to fetch bookings");
   }
 
   return response.json();

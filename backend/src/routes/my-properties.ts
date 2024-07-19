@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
 import multer from "multer";
 import cloudinary from "cloudinary";
-import Property, { PropertyType } from "../models/property";
+import Property from "../models/property";
 import verifyToken from "../middleware/auth";
 import { body } from "express-validator";
-
+import { PropertyType } from "../shared/types";
 
 const router = express.Router();
 

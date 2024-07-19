@@ -21,7 +21,7 @@ export type PropertyType = {
   starRating: number;
   imageUrls: string[];
   lastUpdated: Date;
-  // bookings: BookingType[];
+  bookings: BookingType[];
 };
 
 export type BookingType = {
