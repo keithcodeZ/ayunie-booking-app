@@ -37,7 +37,7 @@ const SignIn = () => {
     });
 
     return (
-        <div className="flex flex-col justify-center py-10 items-center">
+        <div className="flex flex-col justify-center py-20 items-center">
             <form className="w-2/5 flex flex-col gap-5" onSubmit={onSubmit}>
                 <h2 className="text-xl font-bold text-center">Sign In</h2>
 
@@ -87,20 +87,6 @@ const SignIn = () => {
                 <div>
                     <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-l py-2 rounded" type="submit">
                         Login
-                    </button>
-                </div>
-
-                <div className="inline-flex items-center justify-center w-full">
-                    <hr className="w-full h-px my-4 bg-gray-200 border-0" />
-                    <span className="absolute text-xs text-gray-700 px-3 -translate-x-1/2 bg-white left-1/2">or use one of these options</span>
-                </div>
-
-                <div className="grid gap-3">
-                    <button className="w-full bg-white border hover:bg-gray-100 text-gray-700 text-s py-2 rounded" type="submit">
-                        Continue with Google
-                    </button>
-                    <button className="w-full bg-blue-900 hover:bg-blue-700 text-white text-s py-2 rounded" type="submit">
-                        Continue with Facebook
                     </button>
                 </div>
 
