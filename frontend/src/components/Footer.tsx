@@ -30,7 +30,7 @@ const Footer = () => {
 
             <div>
                 <div className="flex py-4 justify-center">
-                <img src="../src/assets/ayunie-logo.png" alt="ayunie-logo.png" className="h-20 pr-10" />
+                <img src="../src/assets/images/ayunie-logo.png" alt="ayunie-logo.png" className="h-20 pr-10" />
 
                 </div>
                 

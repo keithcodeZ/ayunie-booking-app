@@ -9,7 +9,9 @@ const Header = () => {
     return (
         <div className="border bg-white py-3">
             <div className=" flex justify-between px-20">
-                <img src="../src/assets/ayunie-logo.png" alt="ayunie-logo.png" className="h-10 pr-10" />
+                <a href="/">
+                    <img src="../src/assets/images/ayunie-logo.png" alt="ayunie-logo.png" className="h-10" />
+                </a>
                 <span className="flex space-x-2">
                     {isLoggedIn ? 
                         (<>
