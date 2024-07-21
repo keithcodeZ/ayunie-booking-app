@@ -6,7 +6,7 @@ import * as apiClient from "../api-client";
 const AddProperty = () => {
     const {showToast} = useAppContext();
 
-    const {mutate, isLoading} = useMutation(apiClient.addProperty,{
+    const {mutate, isLoading} = useMutation(apiClient.addMyProperty,{
         onSuccess: () => {
             console.log("success")
             showToast(
