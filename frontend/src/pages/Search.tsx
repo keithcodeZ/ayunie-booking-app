@@ -8,6 +8,7 @@ import StarRatingFilter from "../components/StarRatingFilter";
 import PropertyTypesFilter from "../components/PropertyTypesFilter";
 import FacilitiesFilter from "../components/FacilitiesFilter";
 import PriceFilter from "../components/PriceFilter";
+import SearchBar from "../components/SearchBar";
 
 const Search = () => {
   const search = useSearchContext();
@@ -67,73 +68,76 @@ const Search = () => {
         : prevFacilities.filter((prevFacility) => prevFacility !== facility)
     );
   };
-  
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
+    <div>
+      <SearchBar/>
+      <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
 
-      {/* Filter */}
-      <div className="rounded-lg border border-slate-300 p-5 h-fit sticky">
-        <div className="space-y-5">
-          <h3 className="text-m font-semibold border-b border-slate-300 pb-5">
-            Filter by:
-          </h3>
+        {/* Filter */}
+        <div className="rounded-lg border border-slate-300 p-5 h-fit sticky">
+          <div className="space-y-5">
+            <h3 className="text-m font-semibold border-b border-slate-300 pb-5">
+              Filter by:
+            </h3>
 
-          <StarRatingFilter
-            selectedStars={selectedStars}
-            onChange={handleStarsChange}
-          />
-          <PropertyTypesFilter
-            selectedPropertyTypes={selectedPropertyTypes}
-            onChange={handlePropertyTypeChange}
-          />
-          <FacilitiesFilter
-            selectedFacilities={selectedFacilities}
-            onChange={handleFacilityChange}
-          />
-          <PriceFilter
-            selectedPrice={selectedPrice}
-            onChange={(value?: number) => setSelectedPrice(value)}
-          />
-        </div>
-      </div>
-
-      {/* Sort */}
-      <div className="flex flex-col gap-8">
-
-        <div className="flex justify-between items-center">
-
-          <span className="text-xl font-bold text-custom-gray">
-            {propertyData?.pagination.total} Properties found
-            {search.destination ? ` in ${search.destination}` : ""}
-          </span>
-          
-          <select
-            value={sortOption}
-            onChange={(event) => setSortOption(event.target.value)}
-            className="p-2 border rounded-md text-sm"
-          >
-            <option value="">Sort By</option>
-            <option value="starRating">Star Rating</option>
-            <option value="pricePerNightAsc">
-              Price Per Night (low to high)
-            </option>
-            <option value="pricePerNightDesc">
-              Price Per Night (high to low)
-            </option>
-          </select>
-        </div>
-        {propertyData?.data.map((property) => (
-          <SearchResultsCard property={property} />
-        ))}
-
-        <div className="text-sm">
-          <Pagination
-            page={propertyData?.pagination.page || 1}
-            pages={propertyData?.pagination.pages || 1}
-            onPageChange={(page) => setPage(page)}
-          />
+            <StarRatingFilter
+              selectedStars={selectedStars}
+              onChange={handleStarsChange}
+            />
+            <PropertyTypesFilter
+              selectedPropertyTypes={selectedPropertyTypes}
+              onChange={handlePropertyTypeChange}
+            />
+            <FacilitiesFilter
+              selectedFacilities={selectedFacilities}
+              onChange={handleFacilityChange}
+            />
+            <PriceFilter
+              selectedPrice={selectedPrice}
+              onChange={(value?: number) => setSelectedPrice(value)}
+            />
+          </div>
         </div>
 
+        {/* Sort */}
+        <div className="flex flex-col gap-8">
+
+          <div className="flex justify-between items-center">
+
+            <span className="text-xl font-bold text-custom-gray">
+              {propertyData?.pagination.total} Properties found
+              {search.destination ? ` in ${search.destination}` : ""}
+            </span>
+
+            <select
+              value={sortOption}
+              onChange={(event) => setSortOption(event.target.value)}
+              className="p-2 border rounded-md text-sm"
+            >
+              <option value="">Sort By</option>
+              <option value="starRating">Star Rating</option>
+              <option value="pricePerNightAsc">
+                Price Per Night (low to high)
+              </option>
+              <option value="pricePerNightDesc">
+                Price Per Night (high to low)
+              </option>
+            </select>
+          </div>
+          {propertyData?.data.map((property) => (
+            <SearchResultsCard property={property} />
+          ))}
+
+          <div className="text-sm">
+            <Pagination
+              page={propertyData?.pagination.page || 1}
+              pages={propertyData?.pagination.pages || 1}
+              onPageChange={(page) => setPage(page)}
+            />
+          </div>
+
+        </div>
       </div>
     </div>
   );
