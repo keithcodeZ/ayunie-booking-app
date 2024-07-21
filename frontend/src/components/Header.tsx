@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAppContext } from "../contexts/AppContext";
 import UserMenu from "./UserMenu";
+import PropertyMenu from "./PropertyMenu";
 
 const Header = () => {
 
@@ -15,13 +16,10 @@ const Header = () => {
                 <span className="flex space-x-2">
                     {isLoggedIn ?
                         (<>
-                            <Link to="/my-properties"
-                                className="w-48 inline-block bg-white-500 hover:bg-light-brown text-custom-gray font-bold py-2 px-2 rounded text-center">
-                                List your Properties
-                            </Link>
+                            <PropertyMenu/>
                             <Link to="/my-bookings"
-                                className="w-48 inline-block bg-white-500 hover:bg-light-brown text-custom-gray font-bold py-2 px-2 rounded text-center">
-                                My Trips
+                                className="w-30 inline-block bg-white-500 hover:bg-light-brown text-custom-gray py-2 px-2 rounded text-center">
+                                My Bookings
                             </Link>
                             <UserMenu/>
                         </>) : (
