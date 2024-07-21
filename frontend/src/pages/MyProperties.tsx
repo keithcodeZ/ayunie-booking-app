@@ -32,7 +32,7 @@ const MyProperties = () => {
 
                 {propertyData.map((property) => (
 
-                    <div className="flex h-64 border">
+                    <div className="flex h-64 border rounded">
                         <div className="w-1/3 border my-4 ml-4">
                             <img className="object-cover h-56" src={property.imageUrls[0]} />
                         </div>
@@ -53,7 +53,7 @@ const MyProperties = () => {
                                     {property.city}, {property.country}
                                 </div>
 
-                                <div className="px-4 text-xs text-pretty h-24 m-3 overflow-auto">{property.description}</div>
+                                <div className="px-4 text-xs text-pretty h-24 m-3 line-clamp-5">{property.description}</div>
 
                                 <div className=" rounded-sm flex items-center indent-1">
                                     <svg className="h-4 w-4 text-custom-gray" fill="none" viewBox="0 0 24 24" stroke="currentColor">

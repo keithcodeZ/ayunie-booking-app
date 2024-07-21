@@ -70,11 +70,14 @@ const Search = () => {
   
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
-      <div className="rounded-lg border border-slate-300 p-5 h-fit sticky top-10">
+
+      {/* Filter */}
+      <div className="rounded-lg border border-slate-300 p-5 h-fit sticky">
         <div className="space-y-5">
-          <h3 className="text-lg font-semibold border-b border-slate-300 pb-5">
+          <h3 className="text-m font-semibold border-b border-slate-300 pb-5">
             Filter by:
           </h3>
+
           <StarRatingFilter
             selectedStars={selectedStars}
             onChange={handleStarsChange}
@@ -93,16 +96,21 @@ const Search = () => {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-5">
+
+      {/* Sort */}
+      <div className="flex flex-col gap-8">
+
         <div className="flex justify-between items-center">
-          <span className="text-xl font-bold">
+
+          <span className="text-xl font-bold text-custom-gray">
             {propertyData?.pagination.total} Properties found
             {search.destination ? ` in ${search.destination}` : ""}
           </span>
+          
           <select
             value={sortOption}
             onChange={(event) => setSortOption(event.target.value)}
-            className="p-2 border rounded-md"
+            className="p-2 border rounded-md text-sm"
           >
             <option value="">Sort By</option>
             <option value="starRating">Star Rating</option>
@@ -117,13 +125,15 @@ const Search = () => {
         {propertyData?.data.map((property) => (
           <SearchResultsCard property={property} />
         ))}
-        <div>
+
+        <div className="text-sm">
           <Pagination
             page={propertyData?.pagination.page || 1}
             pages={propertyData?.pagination.pages || 1}
             onPageChange={(page) => setPage(page)}
           />
         </div>
+
       </div>
     </div>
   );
