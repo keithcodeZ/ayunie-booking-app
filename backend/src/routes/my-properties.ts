@@ -109,7 +109,7 @@ router.get(
             res.status(500).json({message: "Error fetching properties"});
         }
     }
-    );
+);
 
 router.put("/:propertyId", verifyToken,
     upload.array("imageFiles"),
@@ -142,6 +142,27 @@ router.put("/:propertyId", verifyToken,
     }
 )
 
+router.get(
+    "/:propertyId/bookings",
+    verifyToken,
+    async (req: Request, res: Response) => {
+        try {
+            const property = await Property.findOne({
+                _id: req.params.propertyId,
+                userId: req.userId,
+            });
+
+            if (!property) {
+                return res.status(404).json({ message: "Property not found" });
+            }
+
+            res.json(property.bookings);
+        } catch (error) {
+            res.status(500).json({ message: "Error fetching property bookings" });
+        }
+    }
+);
+
 async function uploadImages(imageFiles: Express.Multer.File[]) {
     const uploadPromises = imageFiles.map(async (image) => {
         // encode the image as a base64 string
@@ -160,6 +181,40 @@ async function uploadImages(imageFiles: Express.Multer.File[]) {
     const imageUrls = await Promise.all(uploadPromises);
     return imageUrls;
 }
+
+router.delete(
+    "/:propertyId/bookings/:bookingId",
+    verifyToken,
+    async (req: Request, res: Response) => {
+        const { propertyId, bookingId } = req.params;
+
+        try {
+            const property = await Property.findOne({
+                _id: propertyId,
+                userId: req.userId,
+            });
+
+            if (!property) {
+                return res.status(404).json({ message: "Property not found" });
+            }
+
+            const updatedBookings = property.bookings.filter(booking => booking._id.toString() !== bookingId);
+
+            if (updatedBookings.length === property.bookings.length) {
+                return res.status(404).json({ message: "Booking not found" });
+            }
+
+            property.bookings = updatedBookings;
+            await property.save();
+
+            res.status(200).json({ message: "Booking deleted successfully" });
+        } catch (error) {
+            console.error("Error deleting booking:", error); // Added for debugging
+            res.status(500).json({ message: "Error deleting booking" });
+        }
+    }
+);
+
 
 export default router;
 
