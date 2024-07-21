@@ -41,10 +41,10 @@ const SearchBar = () => {
   maxDate.setFullYear(maxDate.getFullYear() + 1);
 
   return (
-    <form
+    <div>
+        <form
       onSubmit={handleSubmit}
-      className="-mt-8 p-3 bg-orange-400 rounded shadow-md grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 items-center gap-4"
-    >
+      className="-mt-8 p-3 bg-orange-400 rounded shadow-md grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 items-center gap-4">
 
         {/* Destination Search Field */}
         <div className="flex flex-row items-center flex-1 bg-white p-2">
@@ -125,6 +125,7 @@ const SearchBar = () => {
             </button>
         </div>
     </form>
+    </div>
   );
 }
 
