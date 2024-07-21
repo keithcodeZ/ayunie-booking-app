@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useAppContext } from "../contexts/AppContext";
-import SignOutButton from "./SignOutButton";
 import UserMenu from "./UserMenu";
 
 const Header = () => {
