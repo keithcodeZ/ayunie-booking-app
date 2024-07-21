@@ -55,10 +55,8 @@ const ManagePropertyForm = ({ onSave, isLoading, property }: Props) => {
         formData.append("type", formDataJSON.type);
         formData.append("adultCount", formDataJSON.adultCount.toString());
         formData.append("childCount", formDataJSON.childCount.toString());
-        // formData.append("facilities", JSON.stringify(formDataJSON.facilities));
         formData.append("pricePerNight", formDataJSON.pricePerNight.toString());
         formData.append("starRating", formDataJSON.starRating.toString());
-        formData.append("imageFiles", formDataJSON.imageFiles[0]);
 
         formDataJSON.facilities.forEach((facility, index) => {
             formData.append(`facilities[${index}]`, facility);
