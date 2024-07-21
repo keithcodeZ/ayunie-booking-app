@@ -20,6 +20,7 @@ import Detail from "./pages/Detail";
 import Booking from "./pages/Booking";
 import MyBookings from "./pages/MyBookings";
 import Home from "./pages/Home";
+import MyPropertyBookings from "./pages/MyPropertyBookings";
 
 function App() {
 
@@ -41,6 +42,7 @@ function App() {
             <Route path="/my-properties" element={<Layout><MyProperties/></Layout>}/>
             <Route path="/my-bookings" element={<Layout><MyBookings/></Layout>}/>
             <Route path="/edit-property/:propertyId" element={<Layout><EditProperty /></Layout>}/>
+            <Route path="/my-properties/:propertyId/bookings" element={<Layout><MyPropertyBookings/></Layout>}/>
           </>
         )}
 

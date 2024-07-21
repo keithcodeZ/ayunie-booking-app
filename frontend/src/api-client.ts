@@ -227,3 +227,27 @@ export const fetchMyBookings = async (): Promise<PropertyType[]> => {
 
   return response.json();
 };
+
+export const fetchPropertyBookings = async (propertyId: string): Promise<PropertyType> => {
+  const response = await fetch(`${API_BASE_URL}/api/my-properties/${propertyId}/bookings`, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error fetching property bookings");
+  }
+
+  return response.json();
+};
+
+export const deleteBooking = async (propertyId: string, bookingId: string) => {
+  const response = await fetch(`${API_BASE_URL}/api/my-properties/${propertyId}/bookings/${bookingId}`, {
+    method: 'DELETE',
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const errorMessage = await response.text(); // Capture error message for debugging
+    throw new Error(`Error deleting booking: ${errorMessage}`);
+  }
+};

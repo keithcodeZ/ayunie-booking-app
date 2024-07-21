@@ -64,13 +64,20 @@ const MyProperties = () => {
                                 </div>
 
                                 <div className="rounded-sm flex justify-between py-3">
-                                    <div>
-                                    <span className="flex">
-                                        <Link to={`/edit-property/${property._id}`}
-                                            className="text-xs inline-block bg-brown hover:bg-light-brown hover:text-custom-gray text-white py-2 px-5 rounded"> Edit Property Details </Link>
-                                    </span>
+                                    <div className="flex flex-row space-x-4">
+                                        <div>
+                                        <span className="flex">
+                                            <Link to={`/edit-property/${property._id}`}
+                                                className="text-xs inline-block bg-brown hover:bg-light-brown hover:text-custom-gray text-white py-2 px-5 rounded"> Edit Property Details </Link>
+                                        </span>
+                                        </div>
+                                        <div>
+                                        <span className="flex">
+                                            <Link to={`/my-properties/${property._id}/bookings`}
+                                                className="text-xs inline-block bg-brown hover:bg-light-brown hover:text-custom-gray text-white py-2 px-5 rounded"> View Guest Bookings </Link>
+                                        </span>
+                                        </div>
                                     </div>
-
                                     <div>
                                     <p className="text-lg text-center text-custom-gray font-bold leading-tight">£{property.pricePerNight}</p>
                                     <p className="text-right leading-none">includes taxes and fees</p>
