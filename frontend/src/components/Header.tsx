@@ -1,10 +1,11 @@
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAppContext } from "../contexts/AppContext";
-import SignOutButton from "./SignOutButton";
+import UserMenu from "./UserMenu";
+import PropertyMenu from "./PropertyMenu";
 
 const Header = () => {
 
-    const {isLoggedIn} = useAppContext();
+    const { isLoggedIn } = useAppContext();
 
     return (
         <div className="border bg-white py-3">
@@ -13,21 +14,19 @@ const Header = () => {
                     <img src="../src/assets/images/ayunie-logo.png" alt="ayunie-logo.png" className="h-10" />
                 </a>
                 <span className="flex space-x-2">
-                    {isLoggedIn ? 
+                    {isLoggedIn ?
                         (<>
-                            <Link to="/my-properties"
-                                className="w-48 inline-block bg-white-500 hover:bg-light-brown text-custom-gray font-bold py-2 px-2 rounded text-center">
-                                List your Properties
-                            </Link>
+                            <PropertyMenu/>
                             <Link to="/my-bookings"
-                                className="w-48 inline-block bg-white-500 hover:bg-light-brown text-custom-gray font-bold py-2 px-2 rounded text-center">
-                                My Trips
+                                className="w-30 inline-block bg-white-500 hover:bg-light-brown text-custom-gray py-2 px-2 rounded text-center">
+                                My Bookings
                             </Link>
-                        <SignOutButton/ >
+                            <UserMenu/>
                         </>) : (
                             <Link to="/sign-in" className="w-48 text-center inline-block bg-brown hover:bg-light-brown hover:text-custom-gray text-white font-bold py-2 px-10 rounded">Sign In</Link>
                         )
                     }
+
                 </span>
             </div>
         </div>
