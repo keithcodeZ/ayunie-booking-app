@@ -1,8 +1,8 @@
-import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
+import { useForm } from "react-hook-form";
 import { useAppContext } from "../contexts/AppContext";
 import { Link, useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "react-query";
 
 export type RegisterFormData = {
     firstName: string;

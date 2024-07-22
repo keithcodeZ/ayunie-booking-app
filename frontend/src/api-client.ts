@@ -1,5 +1,3 @@
-//fetch requests
-
 import { RegisterFormData } from "./pages/Register"
 import { SignInFormData } from "./pages/SignIn";
 import { PropertySearchResponse, PropertyType, UserType } from "../../backend/src/shared/types";

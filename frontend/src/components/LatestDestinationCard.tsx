@@ -23,8 +23,8 @@ const LatestDestinationCard = ({ property }: Props) => {
           <h3 className="text-xl font-bold mb-1">{property.name}</h3>
           <p className="text-sm mb-2">{property.city}, {property.country}</p>
           <span className="flex text-sm text-gray-600">
-              {Array.from({ length: property.starRating }).map(() => (
-                <AiFillStar className="fill-yellow-400" />
+              {Array.from({ length: property.starRating }).map((_, index) => (
+                <AiFillStar key={index} className="fill-yellow-400" />
               ))}
           </span>
           <div className="text-sm text-custom-gray text-center mt-5">

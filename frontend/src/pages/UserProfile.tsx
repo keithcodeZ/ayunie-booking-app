@@ -1,8 +1,8 @@
-import { useMutation, useQuery } from "react-query";
 import * as apiClient from "../api-client";
+import { useMutation, useQuery } from "react-query";
 import { useAppContext } from "../contexts/AppContext";
-import ManageUserForm, { UserFormData } from "../forms/ManageUserForm/ManageUserForm";
 import { UserType } from "../../../backend/src/shared/types";
+import ManageUserForm, { UserFormData } from "../forms/ManageUserForm/ManageUserForm";
 
 const UserProfile = () => {
   const { showToast } = useAppContext();

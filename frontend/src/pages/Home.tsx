@@ -1,10 +1,10 @@
-import { useQuery } from "react-query";
-import * as apiClient from "../api-client";
-import LatestDestinationCard from "../components/LatestDestinationCard";
-import SearchBar from "../components/SearchBar";
-import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css/bundle';
+import * as apiClient from "../api-client";
+import { useQuery } from "react-query";
 import { Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SearchBar from "../components/SearchBar";
+import LatestDestinationCard from "../components/LatestDestinationCard";
 
 const Home = () => {
   const { data: properties } = useQuery("fetchTopProperties", async () => {
@@ -29,6 +29,7 @@ const Home = () => {
         </div>
       </div>
       <SearchBar/>
+
       {/* Carousel Section */}
       <div className="my-8">
         <h2 className="text-3xl font-bold mb-4">Top Rated Properties</h2>
@@ -56,7 +57,7 @@ const Home = () => {
           }}
         >
           {properties?.map((property) => (
-            <SwiperSlide>
+            <SwiperSlide key={property._id}>
               <LatestDestinationCard property={property} />
             </SwiperSlide>
           ))}
