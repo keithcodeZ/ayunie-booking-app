@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import { UserType } from "../shared/types";
+import { UserType, PaymentMethods } from "../shared/types";
+
+const paymentSchema = new mongoose.Schema<PaymentMethods>({
+  name: { type: String, required: true },
+  accountNumber: { type: String, required: true },
+});
 
 //USER SCHEMA
 const userSchema = new mongoose.Schema({
@@ -20,7 +25,8 @@ const userSchema = new mongoose.Schema({
     lastName: {
         type: String,
         required: true
-    }
+    },
+    paymentMethods: [paymentSchema],
 });
 
 //middleware for mongodb that encrypts the password
