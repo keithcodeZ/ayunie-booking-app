@@ -17,11 +17,11 @@ const Home = () => {
   return (
     <div>
       {/* Hero Image Section */}
-      <div className="relative">
+      <div className="relative mb-3">
         <img 
           src="../src/assets/images/ayunie-hero.webp" 
           alt="Hero" 
-          className="w-full h-[400px] object-cover" 
+          className="w-full h-[500px] object-cover" 
         />
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 text-white text-5xl font-bold text-center px-4">
           Ayunie Vacation<br />

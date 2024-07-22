@@ -71,11 +71,8 @@ const Search = () => {
 
   return (
     <div>
-      <div className="py-10">
       <SearchBar/>
-      </div>
       <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
-
         {/* Filter */}
         <div className="rounded-lg border border-slate-300 p-5 h-fit sticky">
           <div className="space-y-5">
