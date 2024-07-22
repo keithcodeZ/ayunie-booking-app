@@ -19,6 +19,31 @@ export const fetchCurrentUser = async (): Promise<UserType> => {
   return response.json();
 };
 
+export const updateCurrentUser = async (UserFormData: FormData)=> {
+    const response = await fetch(`${API_BASE_URL}/api/users/me`,
+    {
+        method: "PUT",
+        body: UserFormData,
+        credentials: "include",
+    });
+
+    if(!response.ok){
+        throw new Error("Failed to update User")
+    }
+
+    return response.json();
+}
+
+export const fetchUserById = async (userId: string): Promise<UserType> => {
+  const response = await fetch(`${API_BASE_URL}/api/users/${userId}`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error fetching user by ID");
+  }
+  return response.json();
+};
+
 export const register = async (formData: RegisterFormData) => {
 
     // an api call to register a user

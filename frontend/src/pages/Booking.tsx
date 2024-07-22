@@ -29,13 +29,21 @@ const Booking = () => {
     }
   );
 
+  const { data: propertyOwner } = useQuery(
+    "fetchUserById",
+    () => apiClient.fetchUserById(property?.userId as string),
+    {
+      enabled: !!property?.userId,
+    }
+  );
+
   const { data: currentUser } = useQuery(
     "fetchCurrentUser",
     apiClient.fetchCurrentUser
   );
 
-  if (!property) {
-    return <></>;
+  if (!property || !propertyOwner) {
+    return <></>; // Or some loading or error state
   }
 
   return (
@@ -48,7 +56,7 @@ const Booking = () => {
             numberOfNights={numberOfNights}
             property={property}
         />
-      {currentUser && <BookingForm currentUser={currentUser} numberOfNights={numberOfNights} property={property}/>}
+      {currentUser && <BookingForm currentUser={currentUser} numberOfNights={numberOfNights} property={property} propertyOwner={propertyOwner}/>}
     </div>
   );
 };

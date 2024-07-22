@@ -18,7 +18,7 @@ export default function UserMenu() {
                 <div className="py-1">
                     <MenuItem>
                         <a
-                            href="#"
+                            href="/profile"
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900">
                             Profile
                         </a>
