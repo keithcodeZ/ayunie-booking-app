@@ -41,7 +41,7 @@ const MyProperties = () => {
 
                             <h2 className="text-xl font-bold py-2">{property.name}</h2>
 
-                            <div className="text-xs">
+                            <div className="text-sm">
 
                                 <div className="flex items-center indent-1">
 
@@ -53,7 +53,7 @@ const MyProperties = () => {
                                     {property.city}, {property.country}
                                 </div>
 
-                                <div className="px-4 text-xs text-pretty h-24 m-3 line-clamp-5">{property.description}</div>
+                                <div className="px-4 text-xs text-pretty h-24 m-2 line-clamp-5">{property.description}</div>
 
                                 <div className=" rounded-sm flex items-center indent-1">
                                     <svg className="h-4 w-4 text-custom-gray" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -66,21 +66,21 @@ const MyProperties = () => {
                                 <div className="rounded-sm flex justify-between py-3">
                                     <div className="flex flex-row space-x-4">
                                         <div>
-                                        <span className="flex">
-                                            <Link to={`/edit-property/${property._id}`}
-                                                className="text-xs inline-block bg-brown hover:bg-light-brown hover:text-custom-gray text-white py-2 px-5 rounded"> Edit Property Details </Link>
-                                        </span>
+                                            <span className="flex">
+                                                <Link to={`/edit-property/${property._id}`}
+                                                    className="text-xs inline-block bg-brown hover:bg-light-brown hover:text-custom-gray text-white py-2 px-5 rounded"> Edit Property Details </Link>
+                                            </span>
                                         </div>
                                         <div>
-                                        <span className="flex">
-                                            <Link to={`/my-properties/${property._id}/bookings`}
-                                                className="text-xs inline-block bg-brown hover:bg-light-brown hover:text-custom-gray text-white py-2 px-5 rounded"> View Guest Bookings </Link>
-                                        </span>
+                                            <span className="flex">
+                                                <Link to={`/my-properties/${property._id}/bookings`}
+                                                    className="text-xs inline-block bg-brown hover:bg-light-brown hover:text-custom-gray text-white py-2 px-5 rounded"> View Guest Bookings </Link>
+                                            </span>
                                         </div>
                                     </div>
                                     <div>
-                                    <p className="text-lg text-center text-custom-gray font-bold leading-tight">£{property.pricePerNight}</p>
-                                    <p className="text-right leading-none">includes taxes and fees</p>
+                                        <p className="text-lg text-center text-custom-gray font-bold leading-tight">£{property.pricePerNight}</p>
+                                        <p className="text-right leading-none">includes taxes and fees</p>
                                     </div>
 
                                 </div>
