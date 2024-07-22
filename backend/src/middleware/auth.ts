@@ -5,11 +5,12 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 declare global {
     namespace Express {
         interface Request {
-            userId?: string;
+            userId: string;
         }
     }
 }
 
+// logged in user middleware
 const verifyToken = (request: Request, response: Response, next: NextFunction) => {
 
     //we need to install a cookie parser package -- npn i cookie-parser

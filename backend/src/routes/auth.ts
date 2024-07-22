@@ -70,7 +70,7 @@ router.post("/login",
 //whenever wemake a request to the validate token endopoint it's going to run some middleware which will check the HTTP Cookie that was sent to us by the frontend
 router.get("/validate-token", verifyToken, (request: Request, response: Response) => {
     
-    response.status(200).send({ userID: request.userId });
+    response.status(200).send({ userId: request.userId });
 });
 
 

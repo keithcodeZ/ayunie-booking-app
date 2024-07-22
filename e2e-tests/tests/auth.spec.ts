@@ -26,7 +26,7 @@ test('should allow the user to sign in', async ({ page }) => {
   await expect(page.getByText("Sign in successful")).toBeVisible();
 
   await expect(page.getByRole('link', { name: 'My Bookings' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'My Hotels' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'My Properties' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Sign Out' })).toBeVisible();
 
   // await page.goto('https://playwright.dev/');
@@ -56,7 +56,7 @@ test("should allow user to register", async ({ page }) => {
 
   await expect(page.getByText("Registration successful")).toBeVisible();
   await expect(page.getByRole('link', { name: 'My Bookings' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'My Hotels' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'My Properties' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Sign Out' })).toBeVisible();
 
 

@@ -1,46 +1,30 @@
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAppContext } from "../contexts/AppContext";
-import SignOutButton from "./SignOutButton";
-import ayunieLogo from '../assets/ayunie-icon.svg';
+import UserMenu from "./UserMenu";
+import PropertyMenu from "./PropertyMenu";
+import BookingsMenu from "./BookingsMenu";
 
 const Header = () => {
 
-    const {isLoggedIn} = useAppContext();
+    const { isLoggedIn } = useAppContext();
 
     return (
-        <div className="bg-stone-50 py-6">
-            <div className="container mx-auto flex justify-between">
-                <span className="text-3xl text-white font-bold tracking-tight">
-                    <Link to="/">
-                        <img src={ayunieLogo} alt="" />
-                    </Link>
-                </span>
+        <div className="border bg-white py-3">
+            <div className=" flex justify-between px-20">
+                <a href="/">
+                    <img src="../src/assets/images/ayunie-logo.png" alt="ayunie-logo.png" className="h-10" />
+                </a>
                 <span className="flex space-x-2">
-                    {isLoggedIn ? 
+                    {isLoggedIn ?
                         (<>
-                            <Link to="/my-bookings"
-                                className="flex items-center px-3 font-bold text-white hover:bg-blue-600"
-                            >
-                                My Bookings
-                            </Link>
-                            <Link to="/my-hotels"
-                                className="flex items-center px-3 font-bold text-white hover:bg-blue-600"
-                            >
-                                My Hotels
-                            </Link>
-                            <SignOutButton />
-                            {/* <button>Sign Out</button> */}
+                            <PropertyMenu/>
+                            <BookingsMenu/>
+                            <UserMenu/>
                         </>) : (
-                        <>
-                            <Link to="/register" className="flex items-center px-3 font-bold  bg-white hover:text-white hover:bg-yellow-900 rounded">Sign up</Link>
-
-                            <Link to="/sign-in" className="flex items-center px-3 font-bold  bg-white hover:text-white hover:bg-yellow-900 rounded">Login</Link>
-                            
-                            <Link to="/sign-in" className="flex items-center px-3 font-bold text-white bg-yellow-900  hover:bg-yellow-800 rounded">List your property</Link>
-                        </>
+                            <Link to="/sign-in" className="w-48 text-center inline-block bg-brown hover:bg-light-brown hover:text-custom-gray text-white font-bold py-2 px-10 rounded">Sign In</Link>
                         )
                     }
-                    
+
                 </span>
             </div>
         </div>
