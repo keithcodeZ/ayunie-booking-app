@@ -1,8 +1,8 @@
 import React from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import Hero from "../components/Hero";
-import SearchBar from "../components/SearchBar";
+// import Hero from "../components/Hero";
+// import SearchBar from "../components/SearchBar";
 
 interface Props {
     children: React.ReactNode;

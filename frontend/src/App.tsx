@@ -9,7 +9,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Layout from './layouts/Layout';
-import SignUpLogin from "./layouts/SignUpLogin";
+// import SignUpLogin from "./layouts/SignUpLogin";
 import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
 import AddProperty from "./pages/AddProperty";
