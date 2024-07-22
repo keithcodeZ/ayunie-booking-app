@@ -1,7 +1,7 @@
-import { useMutation, useQuery } from "react-query";
-import { useParams } from "react-router-dom";
 import * as apiClient from "../api-client";
+import { useParams } from "react-router-dom";
 import { useAppContext } from "../contexts/AppContext";
+import { useMutation, useQuery } from "react-query";
 import ManagePropertyForm from "../forms/ManagePropertyForm/ManagePropertyForm";
 
 const EditProperty = () => {

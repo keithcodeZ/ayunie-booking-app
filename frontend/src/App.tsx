@@ -1,7 +1,3 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
 import {
   BrowserRouter as Router,
   Route,
@@ -21,9 +17,9 @@ import Booking from "./pages/Booking";
 import MyBookings from "./pages/MyBookings";
 import Home from "./pages/Home";
 import MyPropertyBookings from "./pages/MyPropertyBookings";
+import UserProfile from "./pages/UserProfile";
 
 function App() {
-
   const { isLoggedIn } = useAppContext();
 
   return (
@@ -43,6 +39,7 @@ function App() {
             <Route path="/my-bookings" element={<Layout><MyBookings/></Layout>}/>
             <Route path="/edit-property/:propertyId" element={<Layout><EditProperty /></Layout>}/>
             <Route path="/my-properties/:propertyId/bookings" element={<Layout><MyPropertyBookings/></Layout>}/>
+            <Route path="/profile" element={<Layout><UserProfile/></Layout>}/>
           </>
         )}
 
