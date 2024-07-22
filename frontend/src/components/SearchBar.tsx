@@ -6,127 +6,141 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
-  const navigate = useNavigate();
-  const search = useSearchContext();
+    const navigate = useNavigate();
+    const search = useSearchContext();
 
-  const [destination, setDestination] = useState<string>(search.destination);
-  const [checkIn, setCheckIn] = useState<Date>(search.checkIn);
-  const [checkOut, setCheckOut] = useState<Date>(search.checkOut);
-  const [adultCount, setAdultCount] = useState<number>(search.adultCount);
-  const [childCount, setChildCount] = useState<number>(search.childCount);
+    const [destination, setDestination] = useState<string>(search.destination);
+    const [checkIn, setCheckIn] = useState<Date>(search.checkIn);
+    const [checkOut, setCheckOut] = useState<Date>(search.checkOut);
+    const [adultCount, setAdultCount] = useState<number>(search.adultCount);
+    const [childCount, setChildCount] = useState<number>(search.childCount);
 
-  const handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    search.saveSearchValues(
-      destination,
-      checkIn,
-      checkOut,
-      adultCount,
-      childCount
+    const handleSubmit = (event: FormEvent) => {
+        event.preventDefault();
+        search.saveSearchValues(
+            destination,
+            checkIn,
+            checkOut,
+            adultCount,
+            childCount
+        );
+        navigate("/search")
+    };
+
+    const handleClear = () => {
+        search.clearSearchValues();
+        setDestination('');
+        setCheckIn(new Date());
+        setCheckOut(new Date());
+        setAdultCount(1);
+        setChildCount(0);
+    };
+
+    const minDate = new Date();
+    const maxDate = new Date();
+    maxDate.setFullYear(maxDate.getFullYear() + 1);
+
+    return (
+        <div className="bg-light-brown rounded-3xl p-5 mb-5">
+
+            <div className="flex flex-col w-full items-center py-2 mb-4">
+                <MdTravelExplore size={50} />
+                <h1 className="text-2xl font-semibold"> Search for an accomodation </h1>
+                <p className="text-sm">Discover the perfect space for you!</p>
+            </div>
+
+
+
+            <form onSubmit={handleSubmit}>
+
+                <div className="grid grid-cols-2">
+                    {/* Destination Search Field */}
+                    <div className="flex flex-row items-center flex-1 p-2 col-span-2">
+                        <label className="text-gray-700 text-xs flex-1">
+                            Search for anything
+                            <input
+                                placeholder="Where are you going?"
+                                className="bg-white rounded w-full py-3 px-2 font-normal"
+                                value={destination}
+                                onChange={(event) => setDestination(event.target.value)}
+                            />
+                        </label>
+                    </div>
+
+                    {/* Guest Count Field */}
+                    <div className="flex flex-row items-center flex-1 p-2 gap-4">
+                        <label className="text-gray-700 text-xs flex-1">
+                            Adults:
+                            <input
+                                className="bg-white rounded w-full py-3 px-2 font-normal"
+                                type="number"
+                                min={1}
+                                max={20}
+                                value={adultCount}
+                                onChange={(event) => setAdultCount(parseInt(event.target.value))}
+                            />
+                        </label>
+                        <label className="text-gray-700 text-xs flex-1">
+                            Children:
+                            <input
+                                className="bg-white rounded w-full py-3 px-2 font-normal"
+                                type="number"
+                                min={0}
+                                max={20}
+                                value={childCount}
+                                onChange={(event) => setChildCount(parseInt(event.target.value))}
+                            />
+                        </label>
+                    </div>
+
+
+                    {/* Date Fields */}
+                    <div className="flex flex-row items-center flex-1 p-2 gap-4">
+                        <label className="text-gray-700 text-xs flex-1">
+                            Check-in date
+                            <DatePicker
+                                selected={checkIn}
+                                onChange={(date) => setCheckIn(date as Date)}
+                                selectsStart
+                                startDate={checkIn}
+                                endDate={checkOut}
+                                minDate={minDate}
+                                maxDate={maxDate}
+                                placeholderText="Check-in Date"
+                                className="bg-white rounded w-full py-3 px-2 font-normal"
+                                wrapperClassName="min-w-full"
+                            />
+                        </label>
+                        <label className="text-gray-700 text-xs flex-1">
+                            Check-out date
+                            <DatePicker
+                                selected={checkOut}
+                                onChange={(date) => setCheckOut(date as Date)}
+                                selectsStart
+                                startDate={checkIn}
+                                endDate={checkOut}
+                                minDate={minDate}
+                                maxDate={maxDate}
+                                placeholderText="Check-out Date"
+                                className="bg-white rounded w-full py-3 px-2 font-normal"
+                                wrapperClassName="min-w-full"
+                            />
+                        </label>
+                    </div>
+
+                </div>
+                <div className="flex flex-row justify-center flex-1 p-4 gap-4">
+                        <button className="w-2/3 text-center inline-block bg-brown hover:shadow-lg text-white font-bold py-2 px-10 rounded">
+                            Search
+                        </button>
+                        <button type="button" onClick={handleClear} className="w-1/3 text-center inline-block bg-red-900 hover:shadow-lg text-white font-bold py-2 px-10 rounded">
+                            Clear
+                        </button>
+                    </div>
+
+            </form>
+        </div>
     );
-    navigate("/search")
-  };
-
-  const handleClear = () => {
-    search.clearSearchValues();
-    setDestination('');
-    setCheckIn(new Date());
-    setCheckOut(new Date());
-    setAdultCount(1);
-    setChildCount(0);
-  };
-
-  const minDate = new Date();
-  const maxDate = new Date();
-  maxDate.setFullYear(maxDate.getFullYear() + 1);
-
-  return (
-    <div>
-        <form
-      onSubmit={handleSubmit}
-      className="-mt-8 p-3 bg-orange-400 rounded shadow-md grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 items-center gap-4">
-
-        {/* Destination Search Field */}
-        <div className="flex flex-row items-center flex-1 bg-white p-2">
-            <MdTravelExplore size={25} className="mr-2" />
-            <input
-                placeholder="Where are you going?"
-                className="text-md w-full focus:outline-none"
-                value={destination}
-                onChange={(event) => setDestination(event.target.value)}
-            />
-        </div>
-
-        {/* Guest Count Field */}
-        <div className="flex bg-white px-2 py-1 gap-2">
-            <label className="items-center flex">
-                Adults:
-                <input
-                    className="w-full p-1 focus:outline-none font-bold"
-                    type="number"
-                    min={1}
-                    max={20}
-                    value={adultCount}
-                    onChange={(event) => setAdultCount(parseInt(event.target.value))}
-                />
-            </label>
-            <label className="items-center flex">
-                Children:
-                <input
-                    className="w-full p-1 focus:outline-none font-bold"
-                    type="number"
-                    min={0}
-                    max={20}
-                    value={childCount}
-                    onChange={(event) => setChildCount(parseInt(event.target.value))}
-                />
-            </label>
-        </div>
-
-
-        {/* Date Fields */}
-
-        <div>
-            <DatePicker
-                selected={checkIn}
-                onChange={(date) => setCheckIn(date as Date)}
-                selectsStart
-                startDate={checkIn}
-                endDate={checkOut}
-                minDate={minDate}
-                maxDate={maxDate}
-                placeholderText="Check-in Date"
-                className="min-w-full bg-white p-2 focus:outline-none"
-                wrapperClassName="min-w-full"
-            />
-        </div>
-        <div>
-            <DatePicker
-                selected={checkOut}
-                onChange={(date) => setCheckOut(date as Date)}
-                selectsStart
-                startDate={checkIn}
-                endDate={checkOut}
-                minDate={minDate}
-                maxDate={maxDate}
-                placeholderText="Check-out Date"
-                className="min-w-full bg-white p-2 focus:outline-none"
-                wrapperClassName="min-w-full"
-            />
-        </div>
-
-        {/* Control Buttons */}
-        <div className="flex gap-1">
-            <button className="w-2/3 bg-blue-600 text-white h-full p-2 font-bold text-xl hover:bg-blue-500">
-                Search
-            </button>
-            <button type="button" onClick={handleClear} className="w-1/3 bg-red-600 text-white h-full p-2 font-bold text-xl hover:bg-red-500">
-                Clear
-            </button>
-        </div>
-    </form>
-    </div>
-  );
 }
 
 export default SearchBar;
