@@ -45,7 +45,8 @@ const Booking = () => {
 	}
 
   return (
-    <div className="grid md:grid-cols-[1fr_2fr]">
+    <div className="grid md:grid-cols-[2fr_1fr]">
+      {currentUser && <BookingForm currentUser={currentUser} numberOfNights={numberOfNights} property={property} propertyOwner={propertyOwner}/>}
       <BookingDetailsSummary
         checkIn={search.checkIn}
         checkOut={search.checkOut}
@@ -54,7 +55,6 @@ const Booking = () => {
         numberOfNights={numberOfNights}
         property={property}
       />
-      {currentUser && <BookingForm currentUser={currentUser} numberOfNights={numberOfNights} property={property} propertyOwner={propertyOwner}/>}
     </div>
   );
 };
