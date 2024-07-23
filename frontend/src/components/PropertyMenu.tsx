@@ -19,12 +19,12 @@ export default function PropertyMenu() {
         anchor="bottom">
           <MenuItem>
             <a className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900" href="/my-properties">
-              List all properties
+              My Properties
             </a>
           </MenuItem>
           <MenuItem>
             <a className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900" href="/add-property">
-              Add a property
+              Add a Property
             </a>
           </MenuItem>
         </MenuItems>
