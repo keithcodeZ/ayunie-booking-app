@@ -49,7 +49,7 @@ const Detail = () => {
 
 
       {/*facilities*/}
-      <span className="w-full text-xl font-bold px-8 pt-10 ">Facilites</span>
+      <span className="w-full text-xl font-bold px-8 pt-10 ">Facilities</span>
       <div className="grid grid-cols-5 gap-2 col-span-2 pt-5 pb-10">
         {property.facilities.map((facility) => (
           <div className="border border-gray-300 rounded-full p-2 rounded-lg text-sm whitespace-nowrap">
