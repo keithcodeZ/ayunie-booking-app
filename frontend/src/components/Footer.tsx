@@ -22,7 +22,9 @@ const Footer = () => {
         </div>
         <div>
           <div className="flex py-4 justify-center">
-            <img src="../src/assets/images/ayunie-logo.png" alt="ayunie-logo.png" className="h-20 pr-10" />
+            <a href="/">
+              <img src="../src/assets/images/ayunie-logo.png" alt="ayunie-logo.png" className="h-20 pr-10" />
+            </a>
           </div> 
           <div className="grid grid-cols-3 text-white text-sm py-1">
             <div className="grid auto-rows-max gap-3">
