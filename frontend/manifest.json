@@ -1,0 +1,23 @@
+{
+  "name": "Ayunie Vacation Home Rental LLC",
+  "short_name": "Ayunie",
+  "description": "Discover the perfect space for you with our wide range of accomodations. List your property and share your best places to the world!",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "landscape-primary",
+  "icons": [
+    {
+      "src": "/src/assets/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/src/assets/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "scope": "/"
+}

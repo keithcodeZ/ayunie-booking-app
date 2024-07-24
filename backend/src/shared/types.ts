@@ -4,7 +4,14 @@ export type UserType = {
   password: string;
   firstName: string;
   lastName: string;
+  paymentMethods: PaymentMethods[];
 };
+
+export type PaymentMethods = {
+  _id: string;
+  name: string;
+  accountNumber: string;
+}
 
 export type PropertyType = {
   _id: string;

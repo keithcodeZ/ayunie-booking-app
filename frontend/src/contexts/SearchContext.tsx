@@ -62,8 +62,8 @@ export const SearchContextProvider = ({ children }: SearchContextProviderProps) 
 
   const clearSearchValues = () => {
     setDestination("");
-    setCheckIn(new Date());
-    setCheckOut(new Date());
+    setCheckIn(new Date(0, 0, 0));
+    setCheckOut(new Date(0, 0, 0));
     setAdultCount(1);
     setChildCount(0);
     setPropertyId("");

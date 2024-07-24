@@ -1,17 +1,17 @@
 import { useForm } from "react-hook-form";
-import { PropertyType, UserType } from "../../../../backend/src/shared/types";
+import { PropertyType, UserType, PaymentMethods } from "../../../../backend/src/shared/types";
 import { useSearchContext } from "../../contexts/SearchContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "react-query";
 import * as apiClient from "../../api-client";
 import { useAppContext } from "../../contexts/AppContext";
-import { paymentOptions } from "../../config/payment-options-config";
 import { useState } from "react";
 
 type Props = {
   currentUser: UserType;
   numberOfNights: number;
   property: PropertyType;
+  propertyOwner: UserType;
 };
 
 export type BookingFormData = {
@@ -24,15 +24,14 @@ export type BookingFormData = {
   checkOut: string;
   propertyId: string;
   totalCost: number;
+  paymentMethod: PaymentMethods[];
 };
 
-const BookingForm = ({ currentUser, numberOfNights, property }: Props) => {
+const BookingForm = ({ currentUser, numberOfNights, property, propertyOwner }: Props) => {
   const search = useSearchContext();
   const { propertyId } = useParams();
-
   const { showToast } = useAppContext();
-
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -56,8 +55,9 @@ const BookingForm = ({ currentUser, numberOfNights, property }: Props) => {
       childCount: search.childCount,
       checkIn: search.checkIn.toISOString(),
       checkOut: search.checkOut.toISOString(),
-      propertyId: propertyId,
+      propertyId: propertyId as string,
       totalCost: property.pricePerNight * numberOfNights,
+      paymentMethod: propertyOwner.paymentMethods || "",
     },
   });
 
@@ -73,73 +73,78 @@ const BookingForm = ({ currentUser, numberOfNights, property }: Props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-5 rounded-lg border border-slate-300 p-5">
-        <span className="text-3xl font-bold">Confirm Your Details</span>
-        <div className="grid grid-cols-2 gap-6">
-            <label className="text-gray-700 text-sm font-bold flex-1">
-                First Name
-                <input
-                    className="mt-1 border rounded w-full py-2 px-3 text-gray-700 bg-gray-200 font-normal"
-                    type="text"
-                    readOnly
-                    disabled
-                    {...register("firstName")}
-                />
-            </label>
-            <label className="text-gray-700 text-sm font-bold flex-1">
-                Last Name
-                <input
-                    className="mt-1 border rounded w-full py-2 px-3 text-gray-700 bg-gray-200 font-normal"
-                    type="text"
-                    readOnly
-                    disabled
-                    {...register("lastName")}
-                />
-            </label>
-            <label className="text-gray-700 text-sm font-bold flex-1">
-                Email
-                <input
-                    className="mt-1 border rounded w-full py-2 px-3 text-gray-700 bg-gray-200 font-normal"
-                    type="text"
-                    readOnly
-                    disabled
-                    {...register("email")}
-                />
-            </label>
+    <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-5 rounded-lg border border-slate-300 p-5 m-5">
+      <h1 className="text-xl font-bold"> Confirm your details </h1>
+      
+      <div className="grid grid-cols-2 gap-6">
+        <label className="text-gray-700 text-xs font-bold flex-1">
+          First Name
+          <input
+            className="mt-1 border rounded w-full py-2 px-3 text-gray-700 bg-gray-200 font-normal"
+            type="text"
+            readOnly
+            disabled
+            {...register("firstName")}
+          />
+        </label>
+        <label className="text-gray-700 text-xs font-bold flex-1">
+          Last Name
+          <input
+            className="mt-1 border rounded w-full py-2 px-3 text-gray-700 bg-gray-200 font-normal"
+            type="text"
+            readOnly
+            disabled
+            {...register("lastName")}
+          />
+        </label>
+        <label className="text-gray-700 text-xs font-bold flex-1 col-span-2">
+          Email
+          <input
+            className="mt-1 border rounded w-full py-2 px-3 text-gray-700 bg-gray-200 font-normal"
+            type="text"
+            readOnly
+            disabled
+            {...register("email")}
+          />
+        </label>
+      </div>
+
+      <div className="space-y-2">
+        <h2 className="text-xl font-bold pb-4">Your Price Summary</h2>
+        <div className="bg-light-brown p-6 rounded-md">
+          <div className="font-semibold text-lg">
+            Total Cost: ${(property.pricePerNight * numberOfNights).toFixed(2)}
+          </div>
+          <div className="text-xs">Includes taxes and charges</div>
         </div>
+      </div>
 
-       <div className="space-y-2">
-         <h2 className="text-xl font-semibold">Your Price Summary</h2>
-         <div className="bg-blue-200 p-4 rounded-md">
-           <div className="font-semibold text-lg">
-             Total Cost: ${(property.pricePerNight * numberOfNights).toFixed(2)}
-           </div>
-           <div className="text-xs">Includes taxes and charges</div>
-         </div>
-       </div>
+      <div className="space-y-6">
+        <h3 className="text-xl font-bold pb-4">Payment Options:</h3>
+        <div className="grid grid-cols-2 gap-6">
+          {propertyOwner.paymentMethods?.map((method) => (
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                {...register("paymentMethod")}
+                className="form-radio"
+              />
+              <span className="font-bold">{method.name}:</span>
+              <span>{method.accountNumber}</span>
+            </label>
+          ))}
+        </div>
+      </div>
 
-       <div className="space-y-6">
-         <h3 className="text-xl font-semibold"> Payment Options:</h3>
-            <div className="grid grid-cols-2 gap-6">
-                {paymentOptions.map((option, index) => (
-                    <label key={index} className="flex items-center space-x-2">
-                        <img src={option.image} alt={option.name} className="w-8 h-8" /> {/* Adjust width and height as needed */}
-                        <span>{option.name}</span>
-                        <span className="text-gray-500 ml-2">{option.accountNumber}</span>
-                    </label>
-                ))}
-            </div>
-       </div>
-
-       <div className="flex justify-end">
-         <button
-           disabled={isLoading}
-           type="submit"
-           className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-md disabled:bg-gray-500"
-         >
-           {isLoading ? "Saving..." : "Confirm Booking"}
-         </button>
-       </div>
+      <div className="flex justify-end">
+        <button
+          disabled={isLoading}
+          type="submit"
+          className="w-48 inline-block bg-brown hover:text-custom-gray hover:bg-light-brown text-white font-bold py-2 px-2 rounded text-center"
+        >
+          {isLoading ? "Saving..." : "Confirm Booking"}
+        </button>
+      </div>
     </form>
   );
 };

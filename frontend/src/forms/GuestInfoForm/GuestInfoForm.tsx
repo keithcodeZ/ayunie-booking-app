@@ -19,6 +19,10 @@ type GuestInfoFormData = {
   childCount: number;
 };
 
+const isInvalidDate = (date: Date | undefined): boolean => {
+  return !date || (date.getFullYear() === 1899 && date.getMonth() === 11 && date.getDate() === 31);
+};
+
 const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
   const search = useSearchContext();
   const { isLoggedIn } = useAppContext();
@@ -27,6 +31,8 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
   const [bookings, setBookings] = useState<GuestInfoFormData[]>([]);
   const [dateError, setDateError] = useState<string | null>(null);
   const [dateConflictError, setDateConflictError] = useState<string | null>(null);
+  const [isCheckInOpen, setIsCheckInOpen] = useState<boolean>(false);
+  const [isCheckOutOpen, setIsCheckOutOpen] = useState<boolean>(false);
 
   const {
     watch,
@@ -36,8 +42,8 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
     formState: { errors },
   } = useForm<GuestInfoFormData>({
     defaultValues: {
-      checkIn: search.checkIn,
-      checkOut: search.checkOut,
+      checkIn: isInvalidDate(search.checkIn) ? undefined : new Date(search.checkIn),
+      checkOut: isInvalidDate(search.checkOut) ? undefined : new Date(search.checkOut),
       adultCount: search.adultCount,
       childCount: search.childCount,
     },
@@ -123,8 +129,8 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
   const onSignInClick = (data: GuestInfoFormData) => {
     search.saveSearchValues(
       "",
-      data.checkIn,
-      data.checkOut,
+      data.checkIn || new Date(),
+      data.checkOut || new Date(),
       data.adultCount,
       data.childCount
     );
@@ -134,8 +140,8 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
   const onSubmit = (data: GuestInfoFormData) => {
     search.saveSearchValues(
       "",
-      data.checkIn,
-      data.checkOut,
+      data.checkIn || new Date(),
+      data.checkOut || new Date(),
       data.adultCount,
       data.childCount
     );
@@ -143,8 +149,11 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
   };
 
   return (
-    <div className="flex flex-col p-4 bg-blue-200 gap-4">
-      <h3 className="text-md font-bold">${pricePerNight}</h3>
+    <div className="flex flex-col p-4 bg-light-brown gap-4">
+      <div className="flex text-sm">
+        Price per night: 
+      <h3 className="px-2 font-bold">${pricePerNight}</h3>
+      </div>
       <form
         onSubmit={
           isLoggedIn ? handleSubmit(onSubmit) : handleSubmit(onSignInClick)
@@ -152,42 +161,66 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
       >
         <div className="grid grid-cols-1 gap-4 items-center">
           <div>
+          <label className="text-custom-gray text-xs flex-1">
+            Check-in date:
             <DatePicker
               required
               selected={checkIn}
-              onChange={(date) => setValue("checkIn", date as Date)}
+              onChange={(date) => 
+                {
+                  setValue("checkIn", date as Date);
+                  setIsCheckInOpen(false);
+                }}
               selectsStart
               startDate={checkIn}
               endDate={checkOut}
               minDate={minDate}
               maxDate={maxDate}
               excludeDates={excludeDates}
+              shouldCloseOnSelect
+              onClickOutside={() => setIsCheckInOpen(false)}
+              onSelect={() => setIsCheckInOpen(false)}
+              open={isCheckInOpen}
+              onFocus={() => setIsCheckInOpen(true)}
               placeholderText="Check-in Date"
-              className="min-w-full bg-white p-2 focus:outline-none"
+              className="bg-white rounded w-full py-3 px-2 font-normal"
               wrapperClassName="min-w-full"
             />
+            </label>
           </div>
           <div>
+          <label className="text-custom-gray text-xs flex-1">
+            Check-out date
             <DatePicker
               required
               selected={checkOut}
-              onChange={(date) => setValue("checkOut", date as Date)}
+              onChange={(date) => 
+                {
+                  setValue("checkOut", date as Date);
+                  setIsCheckOutOpen(false);
+                }}
               selectsEnd
               startDate={checkIn}
               endDate={checkOut}
               minDate={minDate}
               maxDate={maxDate}
               excludeDates={excludeDates}
+              shouldCloseOnSelect
+              onClickOutside={() => setIsCheckOutOpen(false)}
+              onSelect={() => setIsCheckOutOpen(false)}
+              open={isCheckOutOpen}
+              onFocus={() => setIsCheckOutOpen(true)}
               placeholderText="Check-out Date"
-              className="min-w-full bg-white p-2 focus:outline-none"
+              className="bg-white rounded w-full py-3 px-2 font-normal"
               wrapperClassName="min-w-full"
             />
+            </label>
           </div>
-          <div className="flex bg-white px-2 py-1 gap-2">
-            <label className="items-center flex">
+          <div className="flex py-1 gap-2">
+            <label className="text-gray-700 text-xs flex-1">
               Adults:
               <input
-                className="w-full p-1 focus:outline-none font-bold"
+                className="bg-white rounded w-full py-3 px-2 font-normal"
                 type="number"
                 min={1}
                 max={20}
@@ -201,10 +234,10 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
                 })}
               />
             </label>
-            <label className="items-center flex">
+            <label className="text-gray-700 text-xs flex-1">
               Children:
               <input
-                className="w-full p-1 focus:outline-none font-bold"
+                className="bg-white rounded w-full py-3 px-2 font-normal"
                 type="number"
                 min={0}
                 max={20}
@@ -226,8 +259,8 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
             <span className="text-red-500 font-semibold text-sm">{dateConflictError}</span>
           )}
           <button
-            className={`bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl ${dateError || dateConflictError ? 'opacity-50 cursor-not-allowed' : ''}`}
-            disabled={!!dateError || !!dateConflictError}
+            className={`text-sm inline-block bg-brown hover:shadow-lg text-white py-2 rounded ${!checkIn || !checkOut || dateError || dateConflictError ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={!checkIn || !checkOut || !!dateError || !!dateConflictError}
           >
             {isLoggedIn ? 'Book Now' : 'Sign in to Book'}
         </button>
