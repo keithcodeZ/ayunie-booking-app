@@ -14,38 +14,53 @@ const MyBookings = () => {
 
   return (
     <div className="">
-
       <span className="flex justify-between py-8 px-8">
-        <h1 className="text-xl font-bold"> My Bookings</h1>
+        <h1 className="text-xl font-bold">My Bookings</h1>
         <Link
           to="/search"
-          className="w-48 inline-block bg-brown hover:text-custom-gray hover:bg-light-brown text-white font-bold py-2 px-2 rounded text-center">
+          className="w-48 inline-block bg-brown hover:text-custom-gray hover:bg-light-brown text-white font-bold py-2 px-2 rounded text-center"
+        >
           Search for Properties
         </Link>
       </span>
 
       <div className="grid grid-cols-1 gap-8">
-
         {properties.map((property) => (
-
-          <div className="flex h-64 border rounded">
+          <div key={property._id} className="flex h-auto border rounded">
             <div className="w-1/3 border my-4 ml-4">
-              <img className="object-cover h-56" src={property.imageUrls[0]} />
+              <img
+                className="object-cover h-full w-full"
+                src={property.imageUrls[0]}
+                alt={`${property.name}`}
+              />
             </div>
 
             <div className="w-2/3 px-4">
-
               <h2 className="text-xl font-bold py-2 pb-1">{property.name}</h2>
-
               <div className="flex items-center indent-1 py-1 text-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="size-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                  />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+                  />
                 </svg>
-                <span>{property.city}, {property.country}</span>
-              </div>
-
-              
+                <span>
+                  {property.city}, {property.country}
+                </span>
+              </div>              
               <label className="text-xs font-bold text-custom-gray">Booked dates:</label>
                 <div className="h-40 overflow-auto">
                 {property.bookings.map((booking) => (
@@ -79,8 +94,6 @@ const MyBookings = () => {
           </div>
         ))}
       </div>
-
-
     </div>
   );
 };
