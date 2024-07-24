@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { newDate } from "react-datepicker/dist/date_utils";
 
 type SearchContext = {
   destination: string;
