@@ -11,8 +11,7 @@ const SearchBar = () => {
 
     const [destination, setDestination] = useState<string>(search.destination);
     const [checkIn, setCheckIn] = useState<Date | undefined>(search.checkIn);
-    const [checkOut, setCheckOut] = useState<Date | undefined>(
-        new Date(search.checkIn.getTime() + 24 * 60 * 60 * 1000)
+    const [checkOut, setCheckOut] = useState<Date | undefined>(search.checkOut
     );
     const [adultCount, setAdultCount] = useState<number>(search.adultCount);
     const [childCount, setChildCount] = useState<number>(search.childCount);
@@ -21,7 +20,9 @@ const SearchBar = () => {
 
     useEffect(() => {
         if (checkIn) {
-            setCheckOut(new Date(checkIn.getTime() + 24 * 60 * 60 * 1000));
+            if (!checkOut || checkIn >= checkOut) {
+                setCheckOut(new Date(checkIn.getTime() + 24 * 60 * 60 * 1000));
+            }
         }
     }, [checkIn]);
 
@@ -118,12 +119,15 @@ const SearchBar = () => {
                                 maxDate={maxDate}
                                 placeholderText="Check-in Date"
                                 className="bg-white rounded w-full py-3 px-2 font-normal"
-                                wrapperClassName="min-w-full"
+                                wrapperClassName="min-w-full relative"
                                 shouldCloseOnSelect
                                 onClickOutside={() => setIsCheckInOpen(false)}
                                 onSelect={() => setIsCheckInOpen(false)}
                                 open={isCheckInOpen}
                                 onFocus={() => setIsCheckInOpen(true)}
+                                popperContainer={({ children }) => (
+                                    <div style={{ zIndex: 1050, position: 'relative' }}>{children}</div>
+                                )}
                             />
                         </label>
                         <label className="text-gray-700 text-xs flex-1">
@@ -141,12 +145,15 @@ const SearchBar = () => {
                                 maxDate={maxDate}
                                 placeholderText="Check-out Date"
                                 className="bg-white rounded w-full py-3 px-2 font-normal"
-                                wrapperClassName="min-w-full"
+                                wrapperClassName="min-w-full relative"
                                 shouldCloseOnSelect
                                 onClickOutside={() => setIsCheckOutOpen(false)}
                                 onSelect={() => setIsCheckOutOpen(false)}
                                 open={isCheckOutOpen}
                                 onFocus={() => setIsCheckOutOpen(true)}
+                                popperContainer={({ children }) => (
+                                    <div style={{ zIndex: 1050, position: 'relative' }}>{children}</div>
+                                )}
                             />
                         </label>
                     </div>
