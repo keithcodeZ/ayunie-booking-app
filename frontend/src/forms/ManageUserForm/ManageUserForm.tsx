@@ -1,6 +1,7 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { useEffect, useState, useRef } from "react";
 import { MdEditSquare, MdDelete } from "react-icons/md";
+import { useLocation } from "react-router-dom";
 
 export type UserFormData = {
   firstName: string;
@@ -20,9 +21,14 @@ const ManageUserForm = ({ onSave, isLoading, user }: Props) => {
   const { handleSubmit, reset, register, watch, setValue } = formMethods;
   const [showFields, setShowFields] = useState(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-
+  
   const paymentMethodRef = useRef<HTMLInputElement>(null);
   const accountNumberRef = useRef<HTMLInputElement>(null);
+  
+  // Access the query parameters
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const isRedirectedFromAddProperty = queryParams.get('redirectedFromAddProperty') === 'true';
 
   useEffect(() => {
     if (user) {
@@ -136,7 +142,10 @@ const ManageUserForm = ({ onSave, isLoading, user }: Props) => {
         </div>
 
         <div className="flex flex-col mt-8">
-          <label className="text-gray-700 text-sm font-medium mb-2">Payment Methods</label>
+          <label className="text-gray-700 text-sm font-medium mb-2 flex items-center">
+            Payment Methods
+            {isRedirectedFromAddProperty && <span className="text-red-500 ml-1 text-xs italic">* required to add a property</span>}
+          </label>
           <div className="bg-gray-100 p-4 rounded-md border border-gray-200 mb-4 text-center">
             <ul className="list-disc list-inside space-y-2 text-gray-700">
               {watch('paymentMethods', []).length > 0 ? (
