@@ -42,8 +42,8 @@ const GuestInfoForm = ({ propertyId, pricePerNight }: Props) => {
     formState: { errors },
   } = useForm<GuestInfoFormData>({
     defaultValues: {
-      checkIn: isInvalidDate(search.checkIn) ? new Date(search.checkIn) : undefined,
-      checkOut: isInvalidDate(search.checkOut) ? new Date(search.checkOut) : undefined,
+      checkIn: isInvalidDate(search.checkIn) ? undefined : new Date(search.checkIn),
+      checkOut: isInvalidDate(search.checkOut) ? undefined : new Date(search.checkOut),
       adultCount: search.adultCount,
       childCount: search.childCount,
     },
