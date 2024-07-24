@@ -34,7 +34,7 @@ const MyProperties = () => {
 
                     <div className="flex h-64 border rounded">
                         <div className="w-1/3 border my-4 ml-4">
-                            <img className="object-cover h-56" src={property.imageUrls[0]} />
+                            <img className="object-cover h-full w-full" src={property.imageUrls[0]} />
                         </div>
 
                         <div className="w-2/3 px-4">
