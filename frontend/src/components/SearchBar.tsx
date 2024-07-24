@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useSearchContext } from "../contexts/SearchContext";
 import { MdTravelExplore } from "react-icons/md";
 import DatePicker from "react-datepicker";
@@ -10,28 +10,40 @@ const SearchBar = () => {
     const search = useSearchContext();
 
     const [destination, setDestination] = useState<string>(search.destination);
-    const [checkIn, setCheckIn] = useState<Date>(search.checkIn);
-    const [checkOut, setCheckOut] = useState<Date>(search.checkOut);
+    const [checkIn, setCheckIn] = useState<Date | undefined>(search.checkIn);
+    const [checkOut, setCheckOut] = useState<Date | undefined>(
+        new Date(search.checkIn.getTime() + 24 * 60 * 60 * 1000)
+    );
     const [adultCount, setAdultCount] = useState<number>(search.adultCount);
     const [childCount, setChildCount] = useState<number>(search.childCount);
+    const [isCheckInOpen, setIsCheckInOpen] = useState<boolean>(false);
+    const [isCheckOutOpen, setIsCheckOutOpen] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (checkIn) {
+            setCheckOut(new Date(checkIn.getTime() + 24 * 60 * 60 * 1000));
+        }
+    }, [checkIn]);
 
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
-        search.saveSearchValues(
-            destination,
-            checkIn,
-            checkOut,
-            adultCount,
-            childCount
-        );
-        navigate("/search")
+        if (checkIn && checkOut) {
+            search.saveSearchValues(
+                destination,
+                checkIn,
+                checkOut,
+                adultCount,
+                childCount
+            );
+            navigate("/search");
+        }
     };
 
     const handleClear = () => {
         search.clearSearchValues();
         setDestination('');
-        setCheckIn(new Date());
-        setCheckOut(new Date());
+        setCheckIn(undefined);
+        setCheckOut(undefined);
         setAdultCount(1);
         setChildCount(0);
     };
@@ -42,17 +54,13 @@ const SearchBar = () => {
 
     return (
         <div className="bg-light-brown rounded-3xl p-5 mb-5">
-
             <div className="flex flex-col w-full items-center py-2 mb-4">
                 <MdTravelExplore size={50} />
-                <h1 className="text-2xl font-semibold"> Search for an accomodation </h1>
+                <h1 className="text-2xl font-semibold"> Search for an accommodation </h1>
                 <p className="text-sm">Discover the perfect space for you!</p>
             </div>
 
-
-
             <form onSubmit={handleSubmit}>
-
                 <div className="grid grid-cols-2">
                     {/* Destination Search Field */}
                     <div className="flex flex-row items-center flex-1 p-2 col-span-2">
@@ -93,14 +101,16 @@ const SearchBar = () => {
                         </label>
                     </div>
 
-
                     {/* Date Fields */}
                     <div className="flex flex-row items-center flex-1 p-2 gap-4">
                         <label className="text-gray-700 text-xs flex-1">
                             Check-in date
                             <DatePicker
                                 selected={checkIn}
-                                onChange={(date) => setCheckIn(date as Date)}
+                                onChange={(date) => {
+                                    setCheckIn(date as Date);
+                                    setIsCheckInOpen(false);
+                                }}
                                 selectsStart
                                 startDate={checkIn}
                                 endDate={checkOut}
@@ -109,38 +119,49 @@ const SearchBar = () => {
                                 placeholderText="Check-in Date"
                                 className="bg-white rounded w-full py-3 px-2 font-normal"
                                 wrapperClassName="min-w-full"
+                                shouldCloseOnSelect
+                                onClickOutside={() => setIsCheckInOpen(false)}
+                                onSelect={() => setIsCheckInOpen(false)}
+                                open={isCheckInOpen}
+                                onFocus={() => setIsCheckInOpen(true)}
                             />
                         </label>
                         <label className="text-gray-700 text-xs flex-1">
                             Check-out date
                             <DatePicker
                                 selected={checkOut}
-                                onChange={(date) => setCheckOut(date as Date)}
-                                selectsStart
+                                onChange={(date) => {
+                                    setCheckOut(date as Date);
+                                    setIsCheckOutOpen(false);
+                                }}
+                                selectsEnd
                                 startDate={checkIn}
                                 endDate={checkOut}
-                                minDate={minDate}
+                                minDate={checkIn || minDate}
                                 maxDate={maxDate}
                                 placeholderText="Check-out Date"
                                 className="bg-white rounded w-full py-3 px-2 font-normal"
                                 wrapperClassName="min-w-full"
+                                shouldCloseOnSelect
+                                onClickOutside={() => setIsCheckOutOpen(false)}
+                                onSelect={() => setIsCheckOutOpen(false)}
+                                open={isCheckOutOpen}
+                                onFocus={() => setIsCheckOutOpen(true)}
                             />
                         </label>
                     </div>
-
                 </div>
                 <div className="flex flex-row justify-center flex-1 p-4 gap-4">
-                        <button className="w-2/3 text-center inline-block bg-brown hover:shadow-lg text-white font-bold py-2 px-10 rounded">
-                            Search
-                        </button>
-                        <button type="button" onClick={handleClear} className="w-1/3 text-center inline-block bg-red-900 hover:shadow-lg text-white font-bold py-2 px-10 rounded">
-                            Clear
-                        </button>
-                    </div>
-
+                    <button className="w-2/3 text-center inline-block bg-brown hover:shadow-lg text-white font-bold py-2 px-10 rounded">
+                        Search
+                    </button>
+                    <button type="button" onClick={handleClear} className="w-1/3 text-center inline-block bg-red-900 hover:shadow-lg text-white font-bold py-2 px-10 rounded">
+                        Clear
+                    </button>
+                </div>
             </form>
         </div>
     );
-}
+};
 
 export default SearchBar;

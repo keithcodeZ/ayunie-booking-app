@@ -117,7 +117,6 @@ const constructSearchQuery = (queryParams: any) => {
   let constructedQuery: any = {};
 
   if (queryParams.destination) {
-    // check name, city, and country for entered phrase
     constructedQuery.$or = [
       { name: new RegExp(queryParams.destination, "i") },
       { city: new RegExp(queryParams.destination, "i") },
@@ -165,6 +164,30 @@ const constructSearchQuery = (queryParams: any) => {
     constructedQuery.pricePerNight = {
       $lte: parseInt(queryParams.maxPrice).toString(),
     };
+  }
+
+  if (queryParams.checkIn && queryParams.checkOut) {
+    const checkInDate = new Date(queryParams.checkIn);
+    const checkOutDate = new Date(queryParams.checkOut);
+
+    constructedQuery.$and = [
+      {
+        "bookings.checkIn": {
+          $not: {
+            $gte: checkInDate,
+            $lt: checkOutDate,
+          },
+        },
+      },
+      {
+        "bookings.checkOut": {
+          $not: {
+            $gt: checkInDate,
+            $lte: checkOutDate,
+          },
+        },
+      },
+    ];
   }
 
   return constructedQuery;

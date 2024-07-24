@@ -6,7 +6,7 @@ export type UserFormData = {
   firstName: string;
   lastName: string;
   email: string;
-  paymentMethods: { id: number; name: string; accountNumber: string }[]; // Added id for identification
+  paymentMethods: { id: number; name: string; accountNumber: string }[];
 };
 
 type Props = {
@@ -28,10 +28,20 @@ const ManageUserForm = ({ onSave, isLoading, user }: Props) => {
     if (user) {
       reset({
         ...user,
-        paymentMethods: user.paymentMethods || [], // Ensure paymentMethods is an empty array if not present
+        paymentMethods: user.paymentMethods || [],
       });
     }
   }, [user, reset]);
+
+  useEffect(() => {
+    if (editIndex !== null && showFields) {
+      const paymentMethod = watch('paymentMethods')[editIndex];
+      if (paymentMethod) {
+        if (paymentMethodRef.current) paymentMethodRef.current.value = paymentMethod.name;
+        if (accountNumberRef.current) accountNumberRef.current.value = paymentMethod.accountNumber;
+      }
+    }
+  }, [editIndex, showFields, watch]);
 
   const onSubmit = handleSubmit((formDataJSON: UserFormData) => {
     const formData = new FormData();
@@ -56,7 +66,7 @@ const ManageUserForm = ({ onSave, isLoading, user }: Props) => {
 
     if (name && accountNumber) {
       const currentPaymentMethods = watch('paymentMethods') || [];
-      const newPaymentMethod = { id: Date.now(), name, accountNumber }; // Generate a unique id for the new entry
+      const newPaymentMethod = { id: Date.now(), name, accountNumber };
 
       if (editIndex !== null) {
         // Editing existing payment method
@@ -77,13 +87,8 @@ const ManageUserForm = ({ onSave, isLoading, user }: Props) => {
   };
 
   const handleEditPaymentMethod = (index: number) => {
-    const paymentMethod = watch('paymentMethods')[index];
-    if (paymentMethod) {
-      if (paymentMethodRef.current) paymentMethodRef.current.value = paymentMethod.name;
-      if (accountNumberRef.current) accountNumberRef.current.value = paymentMethod.accountNumber;
-      setEditIndex(index);
-      setShowFields(true);
-    }
+    setEditIndex(index);
+    setShowFields(true);
   };
 
   const handleDeletePaymentMethod = (index: number) => {
@@ -134,33 +139,33 @@ const ManageUserForm = ({ onSave, isLoading, user }: Props) => {
           <label className="text-gray-700 text-sm font-medium mb-2">Payment Methods</label>
           <div className="bg-gray-100 p-4 rounded-md border border-gray-200 mb-4 text-center">
             <ul className="list-disc list-inside space-y-2 text-gray-700">
-                {watch('paymentMethods', []).length > 0 ? (
+              {watch('paymentMethods', []).length > 0 ? (
                 watch('paymentMethods').map((method, index) => (
-                    <li key={index} className="flex items-center justify-between bg-gray-200 px-2 py-1 rounded-lg text-custom-gray">
+                  <li key={method.id} className="flex items-center justify-between bg-gray-200 px-2 py-1 rounded-lg text-custom-gray">
                     {method.name} - {method.accountNumber}
                     <div className="flex space-x-2">
-                        <button
+                      <button
                         type="button"
                         onClick={() => handleEditPaymentMethod(index)}
                         className="text-custom-gray hover:text-blue-600"
-                        >
+                      >
                         <MdEditSquare className="w-5 h-5" />
-                        </button>
-                        <button
+                      </button>
+                      <button
                         type="button"
                         onClick={() => handleDeletePaymentMethod(index)}
                         className="text-custom-gray hover:text-red-600"
-                        >
+                      >
                         <MdDelete className="w-5 h-5" />
-                        </button>
+                      </button>
                     </div>
-                    </li>
+                  </li>
                 ))
-                ) : (
+              ) : (
                 <span className="text-gray-500 italic text-sm">No payment methods added yet</span>
-                )}
+              )}
             </ul>
-            </div>
+          </div>
 
           {showFields && (
             <div className="flex flex-col gap-4 mb-4">
@@ -181,7 +186,7 @@ const ManageUserForm = ({ onSave, isLoading, user }: Props) => {
                 onClick={handleSavePaymentMethod}
                 className="bg-brown text-white font-bold py-2 px-4 rounded-lg hover:bg-light-brown hover:text-custom-gray"
               >
-                {editIndex !== null ? 'Update' : 'Save'}
+                {editIndex !== null ? 'Update' : 'Add'}
               </button>
             </div>
           )}
