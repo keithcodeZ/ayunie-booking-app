@@ -11,7 +11,7 @@ const FacilitiesSection = () => {
     return (
         <div className="">
             <span className="flex justify-between py-8 px-8">
-                <h1 className="text-xl font-bold text-custom-gray"> Facilities and Ameneties </h1>
+                <h1 className="text-xl font-bold text-custom-gray"> Facilities and Amenities </h1>
             </span>
             
 
