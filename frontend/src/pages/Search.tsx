@@ -4,20 +4,20 @@ import * as apiClient from "../api-client";
 import { useSearchContext } from "../contexts/SearchContext";
 import SearchResultsCard from "../components/SearchResultsCard";
 import Pagination from "../components/Pagination";
-import StarRatingFilter from "../components/StarRatingFilter";
-import PropertyTypesFilter from "../components/PropertyTypesFilter";
-import FacilitiesFilter from "../components/FacilitiesFilter";
-import PriceFilter from "../components/PriceFilter";
+// import StarRatingFilter from "../components/StarRatingFilter";
+// import PropertyTypesFilter from "../components/PropertyTypesFilter";
+// import FacilitiesFilter from "../components/FacilitiesFilter";
+// import PriceFilter from "../components/PriceFilter";
 import SearchBar from "../components/SearchBar";
 
 const Search = () => {
   const search = useSearchContext();
   const [page, setPage] = useState<number>(1);
-  const [selectedStars, setSelectedStars] = useState<string[]>([]);
-  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<string[]>([]);
-  const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
-  const [selectedPrice, setSelectedPrice] = useState<number | undefined>();
-  const [sortOption, setSortOption] = useState<string>("");
+  // const [selectedStars, setSelectedStars] = useState<string[]>([]);
+  // const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<string[]>([]);
+  // const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
+  // const [selectedPrice, setSelectedPrice] = useState<number | undefined>();
+  // const [sortOption, setSortOption] = useState<string>("");
 
   const searchParams = {
     destination: search.destination,
@@ -26,55 +26,56 @@ const Search = () => {
     adultCount: search.adultCount.toString(),
     childCount: search.childCount.toString(),
     page: page.toString(),
-    stars: selectedStars,
-    types: selectedPropertyTypes,
-    facilities: selectedFacilities,
-    maxPrice: selectedPrice?.toString(),
-    sortOption,
+    // stars: selectedStars,
+    // types: selectedPropertyTypes,
+    // facilities: selectedFacilities,
+    // maxPrice: selectedPrice?.toString(),
+    // sortOption,
   };
 
   const { data: propertyData } = useQuery(["searchProperties", searchParams], () =>
     apiClient.searchProperties(searchParams)
   );
 
-  const handleStarsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const starRating = event.target.value;
+  // const handleStarsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const starRating = event.target.value;
 
-    setSelectedStars((prevStars) =>
-      event.target.checked
-        ? [...prevStars, starRating]
-        : prevStars.filter((star) => star !== starRating)
-    );
-  };
+  //   setSelectedStars((prevStars) =>
+  //     event.target.checked
+  //       ? [...prevStars, starRating]
+  //       : prevStars.filter((star) => star !== starRating)
+  //   );
+  // };
 
-  const handlePropertyTypeChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const propertyType = event.target.value;
+  // const handlePropertyTypeChange = (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const propertyType = event.target.value;
 
-    setSelectedPropertyTypes((prevPropertyTypes) =>
-      event.target.checked
-        ? [...prevPropertyTypes, propertyType]
-        : prevPropertyTypes.filter((property) => property !== propertyType)
-    );
-  };
+  //   setSelectedPropertyTypes((prevPropertyTypes) =>
+  //     event.target.checked
+  //       ? [...prevPropertyTypes, propertyType]
+  //       : prevPropertyTypes.filter((property) => property !== propertyType)
+  //   );
+  // };
 
-  const handleFacilityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const facility = event.target.value;
+  // const handleFacilityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const facility = event.target.value;
 
-    setSelectedFacilities((prevFacilities) =>
-      event.target.checked
-        ? [...prevFacilities, facility]
-        : prevFacilities.filter((prevFacility) => prevFacility !== facility)
-    );
-  };
+  //   setSelectedFacilities((prevFacilities) =>
+  //     event.target.checked
+  //       ? [...prevFacilities, facility]
+  //       : prevFacilities.filter((prevFacility) => prevFacility !== facility)
+  //   );
+  // };
 
   return (
     <div>
       <SearchBar/>
-      <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
+      {/* <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5"> */}
+      <div>
         {/* Filter */}
-        <div className="rounded-lg border border-slate-300 p-5 h-fit sticky">
+        {/* <div className="rounded-lg border border-slate-300 p-5 h-fit sticky">
           <div className="space-y-5">
             <h3 className="text-m font-semibold border-b border-slate-300 pb-5">
               Filter by:
@@ -97,7 +98,7 @@ const Search = () => {
               onChange={(value?: number) => setSelectedPrice(value)}
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Sort */}
         <div className="flex flex-col gap-8">
@@ -109,7 +110,7 @@ const Search = () => {
               {search.destination ? ` in ${search.destination}` : ""}
             </span>
 
-            <select
+            {/* <select
               value={sortOption}
               onChange={(event) => setSortOption(event.target.value)}
               className="p-2 border rounded-md text-sm"
@@ -122,7 +123,7 @@ const Search = () => {
               <option value="pricePerNightDesc">
                 Price Per Night (high to low)
               </option>
-            </select>
+            </select> */}
           </div>
           {propertyData?.data.map((property) => (
             <SearchResultsCard property={property} />
