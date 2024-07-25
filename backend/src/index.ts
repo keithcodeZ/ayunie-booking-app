@@ -65,6 +65,11 @@ app.use("/api/properties", propertyRoutes)
 // booking endpoint
 app.use("/api/my-bookings", bookingRoutes)
 
+//catch all route
+app.get("*", (request: Request, response: Response) => {
+    response.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
+});
+
 //starts the server
 app.listen(7000, () => {
     console.log("Server started on port localhost:7000");
