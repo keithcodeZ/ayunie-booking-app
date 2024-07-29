@@ -25,7 +25,8 @@ const Home = () => {
         />
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 text-white text-5xl font-bold text-center px-4">
           Ayunie Vacation<br />
-          Tahanan ng Kabayan
+          Redefined Comfort <br/>
+          Beyond Expectations
         </div>
       </div>
       <SearchBar/>
