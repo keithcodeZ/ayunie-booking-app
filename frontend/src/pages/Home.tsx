@@ -5,6 +5,7 @@ import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SearchBar from "../components/SearchBar";
 import LatestDestinationCard from "../components/LatestDestinationCard";
+import hero from "../assets/images/ayunie-hero.webp"
 
 const Home = () => {
   const { data: properties } = useQuery("fetchTopProperties", async () => {
@@ -19,7 +20,7 @@ const Home = () => {
       {/* Hero Image Section */}
       <div className="relative mb-3">
         <img 
-          src="../src/assets/images/ayunie-hero.webp" 
+          src={hero} 
           alt="Hero" 
           className="w-full h-[500px] object-cover" 
         />
