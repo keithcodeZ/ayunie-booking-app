@@ -1,24 +1,28 @@
-import 'swiper/css/bundle';
-import * as apiClient from "../api-client";
-import { useQuery } from "react-query";
-import { Autoplay } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SearchBar from "../components/SearchBar";
-import LatestDestinationCard from "../components/LatestDestinationCard";
-import hero from "../assets/images/ayunie-hero.webp"
+// import 'swiper/css/bundle';
+// import * as apiClient from "../api-client";
+// import { useQuery } from "react-query";
+// import { Autoplay } from 'swiper/modules';
+// import { Swiper, SwiperSlide } from 'swiper/react';
+// import SearchBar from "../components/SearchBar";
+// import LatestDestinationCard from "../components/LatestDestinationCard";
+// import hero from "../assets/images/ayunie-hero.webp"
 
 const Home = () => {
-  const { data: properties } = useQuery("fetchTopProperties", async () => {
-    const allProperties = await apiClient.fetchProperties();
-    return allProperties
-      .sort((a, b) => b.starRating - a.starRating)
-      .slice(0, 10);
-  });
+  // const { data: properties } = useQuery("fetchTopProperties", async () => {
+  //   const allProperties = await apiClient.fetchProperties();
+  //   return allProperties
+  //     .sort((a, b) => b.starRating - a.starRating)
+  //     .slice(0, 10);
+  // }
+// );
 
   return (
     <div>
+      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 text-white text-5xl font-bold text-center px-4">
+          Under Construction<br /> <br /> <br /> <br /> <br /> <br />
+        </div>
       {/* Hero Image Section */}
-      <div className="relative mb-3">
+      {/* <div className="relative mb-3">
         <img 
           src={hero} 
           alt="Hero" 
@@ -30,10 +34,10 @@ const Home = () => {
           Beyond Expectations
         </div>
       </div>
-      <SearchBar/>
+      <SearchBar/> */}
 
       {/* Carousel Section */}
-      <div className="my-8">
+      {/* <div className="my-8">
         <h2 className="text-3xl font-bold mb-4">Top Rated Properties</h2>
         <Swiper modules={[Autoplay]}
           spaceBetween={30}
@@ -64,7 +68,7 @@ const Home = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
+      </div> */}
     </div>
   );
 };
